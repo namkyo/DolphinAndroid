@@ -76,7 +76,7 @@ class IntroActivity : BaseActivity() {
 
         val networkStatus = NetworkStatus.getConnectivityStatus(activity)
 
-        val permissionList = listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE , Manifest.permission.CAMERA)
+        val permissionList = listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE , Manifest.permission.CAMERA, Manifest.permission.POST_NOTIFICATIONS)
 
         if(NETWORK_STATUS.TYPE_NOT_CONNECTED == networkStatus){
             alertDlgFinish("네트워크 연결을 확인해주세요")

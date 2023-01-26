@@ -71,6 +71,9 @@ class MainActivity : BaseActivity() {
         Logcat.d("urlStr : $urlStr")
 
         binding.webview.loadUrl(urlStr)
+
+        val token = sp.getValue("token","")
+        Logcat.d("token : $token")
     }
 
 
@@ -378,13 +381,15 @@ class MainActivity : BaseActivity() {
      */
     private fun WebView.succFunc(resultCd:String,params:JSONObject){
         JSONObject().apply {
-            put(R.string.callBackResultCd.toString(),resultCd)
-            put(R.string.callBackParams.toString(),params)
+            put("resultCd",resultCd)
+            put("params",params)
         }.let {
             val strJavaScript = "$succFunc($it)"
             Logcat.d("succFunc : $strJavaScript")
             runOnUiThread{
-                this.loadUrl("${R.string.callBackBegin}$strJavaScript")
+                val callBackUrl = "${R.string.callBackBegin}$strJavaScript"
+                Logcat.d("callBackUrl : $url")
+                this.loadUrl(callBackUrl)
             }
         }
     }
@@ -393,8 +398,8 @@ class MainActivity : BaseActivity() {
      */
     private fun WebView.failFunc(resultCd:String,params:JSONObject){
         JSONObject().apply {
-            put(R.string.callBackResultCd.toString(),resultCd)
-            put(R.string.callBackParams.toString(),params)
+            put("resultCd",resultCd)
+            put("params",params)
         }.let {
             val strJavaScript = "$failFunc($it)"
             Logcat.d("failFunc : $strJavaScript")

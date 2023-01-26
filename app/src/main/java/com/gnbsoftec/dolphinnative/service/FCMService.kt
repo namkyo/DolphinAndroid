@@ -8,7 +8,6 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
 import android.text.TextUtils
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.gnbsoftec.dolphinnative.R
 import com.gnbsoftec.dolphinnative.activity.MainActivity
