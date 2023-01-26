@@ -24,8 +24,6 @@ import com.gnbsoftec.dolphinnative.util.BackPressUtil
 import com.gnbsoftec.dolphinnative.util.BitmapUtil
 import com.gnbsoftec.dolphinnative.util.Logcat
 import com.gnbsoftec.dolphinnative.util.PermissionUtil
-import java.io.File
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -38,7 +36,6 @@ class CameraActivity : BaseActivity() {
 
     private var imageCapture: ImageCapture? = null
 
-    private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
 
     private var savedUri: Uri? = null
@@ -64,7 +61,6 @@ class CameraActivity : BaseActivity() {
         init()
         permissionCheck()
 
-        outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
@@ -139,16 +135,6 @@ class CameraActivity : BaseActivity() {
     }
 
 
-
-
-    private fun getOutputDirectory(): File {
-        val mediaDir = externalMediaDirs.firstOrNull()?.let {
-            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
-        }
-        return if (mediaDir != null && mediaDir.exists())
-            mediaDir else filesDir
-    }
-
     private fun openCamera() {
         Logcat.d("openCamera")
 
@@ -183,12 +169,15 @@ class CameraActivity : BaseActivity() {
     private fun savePhoto() {
         imageCapture = imageCapture ?: return
 
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val imageFileName = "gnb_img_" + timeStamp + "_"
-        val photoFile = File(
-            outputDirectory,
-            "$imageFileName.png"
-        )
+//        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+//        val imageFileName = "gnb_img_" + timeStamp + "_"
+//        val photoFile = File(
+//            outputDirectory,
+//            "$imageFileName.jpg"
+//        )
+
+        val photoFile = BitmapUtil.createImageFile()
+
         val outputOption = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
         imageCapture?.takePicture(
@@ -198,7 +187,10 @@ class CameraActivity : BaseActivity() {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
 
 //                    savedUri = Uri.fromFile(photoFile)
-                    savedUri = BitmapUtil.imgResize(activity,photoFile)
+                    val resizeFile = BitmapUtil.imgResize(activity,Uri.fromFile(photoFile))
+                    photoFile.delete()
+                    savedUri = Uri.fromFile(resizeFile)
+
                     Logcat.d("savedUri : $savedUri")
 
                     val animation = AnimationUtils.loadAnimation(activity, R.anim.camera_shutter)

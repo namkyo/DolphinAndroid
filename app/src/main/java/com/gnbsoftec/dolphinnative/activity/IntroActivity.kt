@@ -9,7 +9,10 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.Settings
+import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
@@ -42,18 +45,39 @@ class IntroActivity : BaseActivity() {
 
         //권한체크 콜백
         requestPermission = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()) {
-            if (it.all { permission -> permission.value }) {
+            ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+
+            Logcat.d("RequestMultiplePermissions")
+            val isGranted = permissions.all {permission ->
+                Logcat.d("permission.key  : ${permission.key }")
+                Logcat.d("permission.value  : ${permission.value }")
+                permission.value
+            }
+            Logcat.d("isGranted : $isGranted")
+            val isStoraged = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                Environment.isExternalStorageManager()
+            } else {
+                true
+            }
+            Logcat.d("isStoraged : $isStoraged")
+
+            if(isGranted){
                 Logcat.d("승인")
                 startActivity()
-            } else {
+            }else{
                 Logcat.d("승인 거부")
                 alertDlg("권한 체크좀해주세요", callback = {
                     settingViewFlag = true
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", activity.packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
+                    if(isStoraged){
+                        startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+                            addCategory("android.intent.category.DEFAULT")
+                            data = Uri.parse(String.format("package:%s", applicationContext.packageName))
+                        })
+                    }else{
+                        startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", activity.packageName, null)
+                        })
+                    }
                 })
             }
         }
@@ -67,9 +91,9 @@ class IntroActivity : BaseActivity() {
     override fun onResume() {
         if(settingViewFlag){
             settingViewFlag=false
-//            showToast("권한 재 체크중..")
-//            permissionCheck()
-            startActivity()
+            showToast("권한 재 체크중..")
+            permissionCheck()
+//            startActivity()
         }
         super.onResume()
     }
@@ -79,32 +103,57 @@ class IntroActivity : BaseActivity() {
         val networkStatus = NetworkStatus.getConnectivityStatus(activity)
 
         val permissionList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE , Manifest.permission.CAMERA , Manifest.permission.POST_NOTIFICATIONS)
+            Logcat.d("permissionList1")
+            listOf(Manifest.permission.CAMERA)
+        }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Logcat.d("permissionList2")
+            listOf(Manifest.permission.READ_EXTERNAL_STORAGE , Manifest.permission.CAMERA)
         }else{
+            Logcat.d("permissionList3")
             listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE , Manifest.permission.CAMERA)
         }
 
-        if(NETWORK_STATUS.TYPE_NOT_CONNECTED == networkStatus){
-            alertDlgFinish("네트워크 연결을 확인해주세요")
-        }else{
-            binding.splashView.alpha = 0f
-            binding.splashView.animate()
-                .alpha(1f)
-                .setDuration(1500)
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        super.onAnimationEnd(animation)
-                        //실행할 코드
-                        if (!PermissionUtil.checkPermission(activity, permissionList)) {
-                            Logcat.d("퍼미션 권한X")
-                            requestPermission.launch(permissionList.toTypedArray())
-                        } else {
-                            Logcat.d("퍼미션 권한O")
-                            startActivity()
-                        }
-                    }
-                }).start()
+
+        val isStoraged = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
+        } else {
+            true
         }
+        Logcat.d("isStoraged : $isStoraged")
+
+        if(!isStoraged && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+            alertDlg("권한 체크좀해주세요", callback = {
+                settingViewFlag = true
+                startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+                    addCategory("android.intent.category.DEFAULT")
+                    data = Uri.parse(String.format("package:%s", applicationContext.packageName))
+                })
+            })
+        }else{
+            if(NETWORK_STATUS.TYPE_NOT_CONNECTED == networkStatus){
+                alertDlgFinish("네트워크 연결을 확인해주세요")
+            }else{
+                binding.splashView.alpha = 0f
+                binding.splashView.animate()
+                    .alpha(1f)
+                    .setDuration(1500)
+                    .setListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator) {
+                            super.onAnimationEnd(animation)
+                            //실행할 코드
+                            if (!PermissionUtil.checkPermission(activity, permissionList)) {
+                                Logcat.d("퍼미션 권한X")
+                                requestPermission.launch(permissionList.toTypedArray())
+                            } else {
+                                Logcat.d("퍼미션 권한O")
+                                startActivity()
+                            }
+                        }
+                    }).start()
+            }
+        }
+
+
     }
 
     private fun startActivity(){

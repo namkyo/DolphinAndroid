@@ -8,9 +8,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.IOException
+import com.gnbsoftec.dolphinnative.R
+import com.gnbsoftec.dolphinnative.config.Constants
+import java.io.*
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.net.URL
@@ -24,10 +24,10 @@ object BitmapUtil {
         return BitmapFactory.decodeStream(url.openStream())
     }
 
-    fun createImageFile(): File? {
+    fun createImageFile(): File {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val imageFileName = "img_" + timeStamp + "_"
-        val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val imageFileName = "gnb_img_" + timeStamp + "_"
+        val storageDir = File(Constants.FILE_SAVE_PATH+Constants.FILE_SAVE_SUB_PATH)
         return File.createTempFile(imageFileName, ".jpg", storageDir)
     }
 
@@ -68,13 +68,52 @@ object BitmapUtil {
         val path = MediaStore.Images.Media.insertImage(activity.contentResolver, bitmap, "Title" + " - " + Calendar.getInstance().getTime(), null)
         return Uri.parse(path)
     }
-
+    /**
+     * file -> bitmap
+     */
     fun fileToBitmap(file: File):Bitmap{
         val filePath = file.getPath()
         return BitmapFactory.decodeFile(filePath)
     }
 
-    fun imgResize(activity: Activity,file: File): Uri? {
-        return bitmapToUri(activity,resizeBitmap(fileToBitmap(file),1024))
+    /**
+     * bitmap -> file
+     */
+    fun bitmapToFile(bitmap: Bitmap): File? {
+        val strFilePath = Constants.FILE_SAVE_PATH+Constants.FILE_SAVE_SUB_PATH
+        val file = File(strFilePath)
+        if (!file.exists()) file.mkdirs()
+        val fileCacheItem = createImageFile()!!
+        var out: OutputStream? = null
+        try {
+            fileCacheItem.createNewFile()
+            out = FileOutputStream(fileCacheItem)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                out?.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+        return fileCacheItem
+    }
+
+
+    fun imgResize(activity: Activity,uri: Uri): File? {
+        val resizeBitmap = resizeBitmap(uriToBitmap(activity,uri)!!,2048)
+        val resizeFile = bitmapToFile(resizeBitmap)
+        return resizeFile
+    }
+
+
+    fun getOutputDirectory(activity: Activity): File {
+        val mediaDir = activity.externalMediaDirs.firstOrNull()?.let {
+            File(it, activity.resources.getString(R.string.app_name)).apply { mkdirs() }
+        }
+        return if (mediaDir != null && mediaDir.exists())
+            mediaDir else activity.filesDir
     }
 }

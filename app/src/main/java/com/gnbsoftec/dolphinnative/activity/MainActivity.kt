@@ -138,7 +138,7 @@ class MainActivity : BaseActivity() {
                     setRequiresCharging(false)
                     setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                     allowScanningByMediaScanner()
-                    val fileSubPath = "/GNB/$fileName"
+                    val fileSubPath = "${Constants.FILE_SAVE_SUB_PATH}$fileName"
                     Logcat.d("fileSubPath : $fileSubPath")
                     setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileSubPath)
                     //content://downloads/public_downloads
@@ -387,8 +387,8 @@ class MainActivity : BaseActivity() {
             val strJavaScript = "$succFunc($it)"
             Logcat.d("succFunc : $strJavaScript")
             runOnUiThread{
-                val callBackUrl = "${R.string.callBackBegin}$strJavaScript"
-                Logcat.d("callBackUrl : $url")
+                val callBackUrl = "javascript:$strJavaScript"
+                Logcat.d("callBackUrl : $callBackUrl")
                 this.loadUrl(callBackUrl)
             }
         }
