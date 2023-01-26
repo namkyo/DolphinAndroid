@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.CameraPreviewActivity">
+    <ImageView
+        android:id="@+id/imageViewPhoto"
+        android:layout_weight="7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/prev"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/view_border_2"
+            android:textColor="@color/black"
+            android:text="다시찍기"
+            android:fontFamily="@font/gmarketsansttfbold"
+            android:textSize="20sp"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/next"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/view_border_1"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:text="전송"
+            android:fontFamily="@font/gmarketsansttfbold"
+            android:layout_weight="1"/>
+    </LinearLayout>
+</LinearLayout>

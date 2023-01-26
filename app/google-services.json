@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "500849814631",
+    "project_id": "gnb-dolphin",
+    "storage_bucket": "gnb-dolphin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500849814631:android:460ef041f4fa3f64f3b8c2",
+        "android_client_info": {
+          "package_name": "com.gnbsoftec.dolphinnative"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500849814631-vqgl8lrf4avm7mfpmoqjboq4n9ggqp8m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWm5HrF1J86G8SWBL1nyaboCRcd2PIOCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500849814631-vqgl8lrf4avm7mfpmoqjboq4n9ggqp8m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

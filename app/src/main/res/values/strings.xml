@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">돌핀인트라넷</string>
+    <string name="firebase_notification_channel_id">alarm_channel_id</string>
+
+
+
+
+    <string name="callBackResultCd">resultCd</string>
+    <string name="callBackParams">params</string>
+
+
+    <string name="callBackBegin">javascript:</string>
+    <string name="callBackSucc">0000</string>
+    <string name="callBackFail">9999</string>
+
+</resources>
