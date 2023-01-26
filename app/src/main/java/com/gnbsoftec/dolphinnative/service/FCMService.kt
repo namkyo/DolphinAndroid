@@ -81,6 +81,8 @@ class FCMService: FirebaseMessagingService() {
             .setSound(soundUri)     // 알림 소리
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentIntent(pendingIntent)       // 알림 실행 시 Intent
+            .setContentTitle(message[Constants.pushIntentData.title])
+            .setContentText(message[Constants.pushIntentData.body])
 
         Logcat.d("message : $message")
 
@@ -90,13 +92,21 @@ class FCMService: FirebaseMessagingService() {
             textStyle.bigText(message[Constants.pushIntentData.body])
             notificationBuilder.setStyle(textStyle)
         }else{
+            val img = BitmapUtil.urlToBitmap("${message[Constants.pushIntentData.image]}")
+            //작은 이미지 아이콘
+            notificationBuilder.setLargeIcon(img)
+
             val pictureStyle = NotificationCompat.BigPictureStyle()
-            pictureStyle.bigPicture(BitmapUtil.urlToBitmap("${message[Constants.pushIntentData.image]}"))
+            //상세보기 이미지 아이콘
+            pictureStyle.bigPicture(img)
+            pictureStyle.bigLargeIcon(null)
             pictureStyle.setBigContentTitle(message[Constants.pushIntentData.title])
             pictureStyle.setSummaryText(message[Constants.pushIntentData.body])
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//                pictureStyle.showBigPictureWhenCollapsed(true)
+//            }
             notificationBuilder.setStyle(pictureStyle)
         }
-
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // 오레오 버전 이후에는 채널이 필요
