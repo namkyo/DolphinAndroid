@@ -7,6 +7,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
@@ -66,8 +67,9 @@ class IntroActivity : BaseActivity() {
     override fun onResume() {
         if(settingViewFlag){
             settingViewFlag=false
-            showToast("권한 재 체크중..")
-            permissionCheck()
+//            showToast("권한 재 체크중..")
+//            permissionCheck()
+            startActivity()
         }
         super.onResume()
     }
@@ -76,7 +78,11 @@ class IntroActivity : BaseActivity() {
 
         val networkStatus = NetworkStatus.getConnectivityStatus(activity)
 
-        val permissionList = listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE , Manifest.permission.CAMERA, Manifest.permission.POST_NOTIFICATIONS)
+        val permissionList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE , Manifest.permission.CAMERA , Manifest.permission.POST_NOTIFICATIONS)
+        }else{
+            listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE , Manifest.permission.CAMERA)
+        }
 
         if(NETWORK_STATUS.TYPE_NOT_CONNECTED == networkStatus){
             alertDlgFinish("네트워크 연결을 확인해주세요")
