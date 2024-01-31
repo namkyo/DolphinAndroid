@@ -99,7 +99,7 @@ class FCMService: FirebaseMessagingService() {
             val pictureStyle = NotificationCompat.BigPictureStyle()
             //상세보기 이미지 아이콘
             pictureStyle.bigPicture(img)
-            pictureStyle.bigLargeIcon(null)
+//            pictureStyle.bigLargeIcon(null)
             pictureStyle.setBigContentTitle(message[Constants.pushIntentData.title])
             pictureStyle.setSummaryText(message[Constants.pushIntentData.body])
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
