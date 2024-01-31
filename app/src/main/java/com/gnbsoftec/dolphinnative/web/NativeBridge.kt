@@ -24,8 +24,8 @@ class NativeBridge(private val activity: Activity) {
             mHandler.post {
                 Logcat.d("===============================NativeBridge "+(++count)+"===============================")
                 Logcat.d("inputData: $inputData")
-                Logcat.d("succFunc : "+succFunc)
-                Logcat.d("failFunc : "+failFunc)
+                Logcat.d("succFunc : $succFunc")
+                Logcat.d("failFunc : $failFunc")
                 Logcat.d("============================================================================")
                 val jsonObject = JSONObject(inputData)
                 val serviceCd = jsonObject.optString("serviceCd", "")

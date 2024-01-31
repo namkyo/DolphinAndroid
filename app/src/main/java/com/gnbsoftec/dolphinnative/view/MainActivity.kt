@@ -24,6 +24,7 @@ import com.gnbsoftec.dolphinnative.databinding.ActivityMainBinding
 import com.gnbsoftec.dolphinnative.util.BackPressUtil
 import com.gnbsoftec.dolphinnative.util.CoroutineUtil
 import com.gnbsoftec.dolphinnative.util.Glog
+import com.gnbsoftec.dolphinnative.util.PermissionUtil
 import com.gnbsoftec.dolphinnative.util.PreferenceUtil
 import com.gnbsoftec.dolphinnative.util.ToastUtil
 import com.gnbsoftec.dolphinnative.util.WebViewUtil
@@ -67,6 +68,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         Glog.d("token : $token")
 
         loadTimer()
+
+        reqPermission(context)
+    }
+    private fun reqPermission(context: Context){
+        if(!PermissionUtil.checkPermission(context,PermissionUtil.permissionList())){
+            mainPermission(PermissionUtil.permissionList()){
+                reqPermission(context)
+            }
+        }
+    }
+    private fun mainPermission(list: List<String>, callback: (Boolean) -> Unit){
+        PermissionUtil.requestPermission(context,permissionResult,list,callback)
     }
 
     private fun loadTimer(){
