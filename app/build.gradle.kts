@@ -17,19 +17,25 @@ android {
         versionName = "1.0"
     }
     signingConfigs {
+        create("config") {
+            storeFile = file("key/dolphin.jks")
+            storePassword = "gnb1234"
+            keyAlias = "gnb"
+            keyPassword = "gnb1234"
+        }
     }
     buildTypes {
         debug {
             isDebuggable = true
             isMinifyEnabled = true
             isShrinkResources = true
-//            signingConfig = signingConfigs.getByName("config")
+            signingConfig = signingConfigs.getByName("config")
         }
         release {
             isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
-//            signingConfig = signingConfigs.getByName("config")
+            signingConfig = signingConfigs.getByName("config")
         }
     }
     compileOptions {

@@ -32,7 +32,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/gmarketsansttfbold"
             android:text="취 소"
-            android:textColor="@color/dolphinSky"
+            android:textColor="@color/color_main"
             android:textSize="15sp" />
         <Button
             android:id="@+id/yesButton"

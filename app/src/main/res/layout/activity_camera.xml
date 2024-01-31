@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.CameraActivity">
+    tools:context=".view.CameraActivity">
 
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
@@ -29,6 +29,6 @@
         android:id="@+id/frameLayoutShutter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dolphinSky"
+        android:background="@color/color_main"
         android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,25 +6,22 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
-import android.os.Build
 import android.text.TextUtils
 import androidx.core.app.NotificationCompat
+import com.gnbsoftec.dolphinnative.common.Constants
 import com.gnbsoftec.dolphinnative.R
-import com.gnbsoftec.dolphinnative.activity.MainActivity
-import com.gnbsoftec.dolphinnative.config.Constants
+import com.gnbsoftec.dolphinnative.view.MainActivity
 import com.gnbsoftec.dolphinnative.util.BitmapUtil
 import com.gnbsoftec.dolphinnative.util.Logcat
-import com.gnbsoftec.dolphinnative.util.SharedPreferenceHelper
+import com.gnbsoftec.dolphinnative.util.PreferenceUtil
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class FCMService: FirebaseMessagingService() {
-    private val sp : SharedPreferenceHelper = SharedPreferenceHelper(this)
-
     // 토큰 생성
     override fun onNewToken(token: String) {
-        sp.put("token",token)
+        PreferenceUtil.put(this,"token",token)
         Logcat.d("onNewToken token: $token")
         FirebaseMessaging.getInstance().subscribeToTopic("ALL").addOnCompleteListener { tast->
             if(tast.isSuccessful){
@@ -110,10 +107,8 @@ class FCMService: FirebaseMessagingService() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // 오레오 버전 이후에는 채널이 필요
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val channel = NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_DEFAULT)
-            notificationManager.createNotificationChannel(channel)
-        }
+        val channel = NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_DEFAULT)
+        notificationManager.createNotificationChannel(channel)
 
         // 알림 생성
         notificationManager.notify(uniId, notificationBuilder.build())

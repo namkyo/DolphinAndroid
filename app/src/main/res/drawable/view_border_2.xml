@@ -5,7 +5,7 @@
         <shape android:shape="rectangle" >
             <stroke
                 android:width="3sp"
-                android:color="@color/dolphinSky" />	<!--테두리 색-->
+                android:color="@color/color_main" />	<!--테두리 색-->
 
             <solid android:color="@color/white" />	<!--배경 색-->
         </shape>

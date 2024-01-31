@@ -3,8 +3,6 @@
     <string name="firebase_notification_channel_id">alarm_channel_id</string>
 
 
-
-
     <string name="callBackResultCd">resultCd</string>
     <string name="callBackParams">params</string>
 
@@ -12,5 +10,12 @@
     <string name="callBackBegin">javascript:</string>
     <string name="callBackSucc">0000</string>
     <string name="callBackFail">9999</string>
+
+
+    <string name="ok">확인</string>
+    <string name="cancel">취소</string>
+
+
+    <string name="loading_image">로딩 이미지</string>
 
 </resources>

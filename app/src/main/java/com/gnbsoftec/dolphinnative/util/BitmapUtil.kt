@@ -6,10 +6,9 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.provider.MediaStore
+import com.gnbsoftec.dolphinnative.common.Constants
 import com.gnbsoftec.dolphinnative.R
-import com.gnbsoftec.dolphinnative.config.Constants
 import java.io.*
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -27,7 +26,7 @@ object BitmapUtil {
     fun createImageFile(): File {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val imageFileName = "gnb_img_" + timeStamp + "_"
-        val storageDir = File(Constants.FILE_SAVE_PATH+Constants.FILE_SAVE_SUB_PATH)
+        val storageDir = File(Constants.FILE_SAVE_PATH+ Constants.FILE_SAVE_SUB_PATH)
         return File.createTempFile(imageFileName, ".jpg", storageDir)
     }
 
@@ -80,7 +79,7 @@ object BitmapUtil {
      * bitmap -> file
      */
     fun bitmapToFile(bitmap: Bitmap): File? {
-        val strFilePath = Constants.FILE_SAVE_PATH+Constants.FILE_SAVE_SUB_PATH
+        val strFilePath = Constants.FILE_SAVE_PATH+ Constants.FILE_SAVE_SUB_PATH
         val file = File(strFilePath)
         if (!file.exists()) file.mkdirs()
         val fileCacheItem = createImageFile()!!
