@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import com.gnbsoftec.dolphinnative.BuildConfig
-import com.gnbsoftec.dolphinnative.util.Glog
+import com.gnbsoftec.dolphinnative.util.GLog
 import timber.log.Timber
 
 class DolphinApplication : Application(), Application.ActivityLifecycleCallbacks {
@@ -23,30 +23,30 @@ class DolphinApplication : Application(), Application.ActivityLifecycleCallbacks
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        Glog.d("onActivityCreated : ${activity.localClassName}")
+        GLog.d("onActivityCreated : ${activity.localClassName}")
     }
 
     override fun onActivityStarted(activity: Activity) {
-        Glog.d("onActivityStarted : ${activity.localClassName}")
+        GLog.d("onActivityStarted : ${activity.localClassName}")
     }
 
     override fun onActivityResumed(activity: Activity) {
-        Glog.d("onActivityResumed : ${activity.localClassName}")
+        GLog.d("onActivityResumed : ${activity.localClassName}")
     }
 
     override fun onActivityPaused(activity: Activity) {
-        Glog.d("onActivityPaused : ${activity.localClassName}")
+        GLog.d("onActivityPaused : ${activity.localClassName}")
     }
 
     override fun onActivityStopped(activity: Activity) {
-        Glog.d("onActivityStopped : ${activity.localClassName}")
+        GLog.d("onActivityStopped : ${activity.localClassName}")
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-        Glog.d("onActivitySaveInstanceState : ${activity.localClassName}")
+        GLog.d("onActivitySaveInstanceState : ${activity.localClassName}")
     }
 
     override fun onActivityDestroyed(activity: Activity) {
-        Glog.d("onActivityDestroyed : ${activity.localClassName}")
+        GLog.d("onActivityDestroyed : ${activity.localClassName}")
     }
 }

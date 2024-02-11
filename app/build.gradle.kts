@@ -69,13 +69,13 @@ dependencies {
     runtimeOnly("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
 
     implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
-    implementation("com.google.firebase:firebase-analytics:21.5.0")
-    implementation("com.google.firebase:firebase-messaging:23.4.0")
-    implementation("com.google.firebase:firebase-crashlytics:18.6.1")
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-messaging")
+
 
     //JSON <=> Map 처리
     implementation("com.google.code.gson:gson:2.10.1")
-
 
     //카메라 라이브러리
     implementation("androidx.camera:camera-view:1.3.1")

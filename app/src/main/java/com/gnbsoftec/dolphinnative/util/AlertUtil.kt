@@ -11,7 +11,7 @@ object AlertUtil {
     fun showAlert(context: Context, title:String, message:String, okBtnStr:String,
                   mOkCallback:((Boolean) -> Unit)){
         if(TextUtils.isEmpty(message)){return}
-        Glog.d("showAlert : $message")
+        GLog.d("showAlert : $message")
         CustomAlert(context ,title ,message, okBtnStr, "" ,mOkCallback , null).show()
     }
     /**
@@ -21,7 +21,7 @@ object AlertUtil {
                     mOkCallback:((Boolean) -> Unit),
                     mCancelCallback:((Boolean) -> Unit)){
         if(TextUtils.isEmpty(message)){return}
-        Glog.d("showAlert : $message")
+        GLog.d("showAlert : $message")
         CustomAlert(context ,title ,message, okBtnStr, cancelBtnStr ,mOkCallback , mCancelCallback).show()
     }
 }

@@ -2,7 +2,6 @@ package com.gnbsoftec.dolphinnative.util
 
 import android.app.Activity
 import android.content.Context
-import com.gnbsoftec.dolphinnative.BuildConfig
 import java.util.*
 
 object PreferenceUtil {
@@ -58,10 +57,10 @@ object PreferenceUtil {
             val pref = context.getSharedPreferences(PREF_KEY, Activity.MODE_PRIVATE)
             "${pref.getString(key, dftValue)}"
         } catch (e: NullPointerException) {
-            Glog.e("에러입니다 [${e.message}]")
+            GLog.e("에러입니다 [${e.message}]")
             dftValue
         } catch (e: Exception) {
-            Glog.e("에러입니다 [${e.message}]")
+            GLog.e("에러입니다 [${e.message}]")
             dftValue
         }
     }
@@ -71,10 +70,10 @@ object PreferenceUtil {
             val pref = context.getSharedPreferences(PREF_KEY, Activity.MODE_PRIVATE)
             pref.getInt(key, dftValue)
         } catch (e: NullPointerException) {
-            Glog.e("에러입니다 [${e.message}]")
+            GLog.e("에러입니다 [${e.message}]")
             dftValue
         } catch (e: Exception) {
-            Glog.e("에러입니다 [${e.message}]")
+            GLog.e("에러입니다 [${e.message}]")
             dftValue
         }
     }
@@ -84,10 +83,10 @@ object PreferenceUtil {
             val pref = context.getSharedPreferences(PREF_KEY, Activity.MODE_PRIVATE)
             pref.getBoolean(key, dftValue)
         } catch (e: NullPointerException) {
-            Glog.e("에러입니다 [${e.message}]")
+            GLog.e("에러입니다 [${e.message}]")
             dftValue
         } catch (e: Exception) {
-            Glog.e("에러입니다 [${e.message}]")
+            GLog.e("에러입니다 [${e.message}]")
             dftValue
         }
     }

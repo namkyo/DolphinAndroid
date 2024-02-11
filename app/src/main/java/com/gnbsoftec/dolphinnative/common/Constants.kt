@@ -3,7 +3,7 @@ package com.gnbsoftec.dolphinnative.common
 import android.content.Context
 import android.os.Environment
 import android.webkit.WebSettings
-import com.gnbsoftec.dolphinnative.util.Glog
+import com.gnbsoftec.dolphinnative.util.GLog
 
 object Constants {
     //운영,개발모드
@@ -51,22 +51,22 @@ object Constants {
     fun isFold(context: Context): Boolean {
         val display = context.resources?.displayMetrics
         return if(display == null) {
-            Glog.d("디바이스 정보 조회 에러")
+            GLog.d("디바이스 정보 조회 에러")
             false
         }else {
             // 태블릿, 폴드 펼침
             if(display.widthPixels > 1600) {
-                Glog.d("태블릿, 폴드 펼침")
+                GLog.d("태블릿, 폴드 펼침")
                 true
             }
             // 미니, 폴드 닫힘
             else if(display.widthPixels < 980) {
-                Glog.d("미니, 폴드 닫힘")
+                GLog.d("미니, 폴드 닫힘")
                 false
             }
             // 일반
             else{
-                Glog.d("일반 폰")
+                GLog.d("일반 폰")
                 false
             }
         }

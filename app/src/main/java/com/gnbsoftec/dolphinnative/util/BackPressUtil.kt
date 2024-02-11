@@ -4,7 +4,6 @@ import android.app.Activity
 import android.webkit.WebView
 import androidx.activity.OnBackPressedCallback
 import androidx.viewbinding.ViewBinding
-import com.gnbsoftec.dolphinnative.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlin.system.exitProcess
 
@@ -18,7 +17,7 @@ object BackPressUtil {
                 // 뒤로가기 클릭 시 실행시킬 코드 입력
                 if (webView.canGoBack()) {
                     webView.goBack()
-                    Logcat.d("뒤로가기 클릭1")
+                    GLog.d("뒤로가기 클릭1")
                 } else {
                     if (System.currentTimeMillis() - mBackWait >= 2000) {
                         mBackWait = System.currentTimeMillis()
@@ -31,7 +30,7 @@ object BackPressUtil {
                         mBackWait=0
                         exitProcess(0)
                     }
-                    Logcat.d("뒤로가기 클릭2")
+                    GLog.d("뒤로가기 클릭2")
                 }
             }
         }
@@ -52,7 +51,7 @@ object BackPressUtil {
                     activity.finish() //액티비티 종료
 //                    exitProcess(0)
                 }
-                Logcat.d("뒤로가기 클릭")
+                GLog.d("뒤로가기 클릭")
             }
         }
 
@@ -71,7 +70,7 @@ object BackPressUtil {
                     mBackWait=0
                     exitProcess(0)
                 }
-                Logcat.d("뒤로가기 클릭")
+                GLog.d("뒤로가기 클릭")
             }
         }
 

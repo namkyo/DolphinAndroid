@@ -4,7 +4,7 @@ import com.gnbsoftec.dolphinnative.common.Constants
 import com.gnbsoftec.dolphinnative.BuildConfig
 import timber.log.Timber
 
-object Glog {
+object GLog {
     private const val TAG = BuildConfig.APPLICATION_ID
     fun d(message: String) {
         if (Constants.IS_DEBUG) Timber.tag(TAG).d(buildLogMessage(message))

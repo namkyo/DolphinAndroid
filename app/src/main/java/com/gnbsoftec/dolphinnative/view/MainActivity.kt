@@ -23,7 +23,7 @@ import com.gnbsoftec.dolphinnative.web.NativeBridge
 import com.gnbsoftec.dolphinnative.databinding.ActivityMainBinding
 import com.gnbsoftec.dolphinnative.util.BackPressUtil
 import com.gnbsoftec.dolphinnative.util.CoroutineUtil
-import com.gnbsoftec.dolphinnative.util.Glog
+import com.gnbsoftec.dolphinnative.util.GLog
 import com.gnbsoftec.dolphinnative.util.PermissionUtil
 import com.gnbsoftec.dolphinnative.util.PreferenceUtil
 import com.gnbsoftec.dolphinnative.util.ToastUtil
@@ -48,24 +48,24 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
 
-        Glog.d("+++++++++++++++++++++++++++++++[ MainActivity : Android BuildConfig ]+++++++++++++++++++++++++++++++")
-        Glog.d("BuildConfig.BUILD_TYPE                  : " + BuildConfig.BUILD_TYPE)
-        Glog.d("Constants.IS_REAL                       : " + Constants.IS_REAL)
-        Glog.d("Constants.IS_DEBUG                      : " + Constants.IS_DEBUG)
+        GLog.d("+++++++++++++++++++++++++++++++[ MainActivity : Android BuildConfig ]+++++++++++++++++++++++++++++++")
+        GLog.d("BuildConfig.BUILD_TYPE                  : " + BuildConfig.BUILD_TYPE)
+        GLog.d("Constants.IS_REAL                       : " + Constants.IS_REAL)
+        GLog.d("Constants.IS_DEBUG                      : " + Constants.IS_DEBUG)
 //        Glog.d("Constants.launchUrl                     : " + Constants.getWebViewHost())
-        Glog.d("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        GLog.d("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
         val urlStr = if(TextUtils.isEmpty(intent.extras?.getString(Constants.pushIntentData.pushUrl))){
             Constants.SERVER_URL
         }else{
             intent.extras?.getString(Constants.pushIntentData.pushUrl)!!
         }
-        Glog.d("urlStr : $urlStr")
+        GLog.d("urlStr : $urlStr")
 
         binding.webView.loadUrl(urlStr)
 
         val token = PreferenceUtil.getValue(context,"token","")
-        Glog.d("token : $token")
+        GLog.d("token : $token")
 
         loadTimer()
 
@@ -88,7 +88,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         lifecycleScope.launch {
             CoroutineUtil.setInterval(1000L) {
                 ++timeIndex
-                Glog.e("앱 오픈 검증 탐지중..$timeIndex")
+                GLog.e("앱 오픈 검증 탐지중..$timeIndex")
                 //정상 앱 오픈
                 if(dolphinApplication.isWebViewLoad){
                     cancel()
@@ -157,7 +157,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         //첨부파일 셋팅
         onShowFileChooserlauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            Glog.d("첨부파일 콜백 : ${result.resultCode}")
+            GLog.d("첨부파일 콜백 : ${result.resultCode}")
 
             if (result.resultCode == RESULT_OK) {
                 result.data?.let {
@@ -184,7 +184,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
      * FCM 토큰 주기
      */
     fun getToken(params: String,succFunc: String, failFunc: String) {
-        Glog.d("getToken.params = $params")
+        GLog.d("getToken.params = $params")
         this.succFunc=succFunc
         this.failFunc=failFunc
         try {
@@ -273,10 +273,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             put("params",params)
         }.let {
             val strJavaScript = "$succFunc($it)"
-            Glog.d("succFunc : $strJavaScript")
+            GLog.d("succFunc : $strJavaScript")
             runOnUiThread{
                 val callBackUrl = "javascript:$strJavaScript"
-                Glog.d("callBackUrl : $callBackUrl")
+                GLog.d("callBackUrl : $callBackUrl")
                 this.loadUrl(callBackUrl)
             }
         }
@@ -290,7 +290,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             put("params",params)
         }.let {
             val strJavaScript = "$failFunc($it)"
-            Glog.d("failFunc : $strJavaScript")
+            GLog.d("failFunc : $strJavaScript")
             runOnUiThread{
                 this.loadUrl("${R.string.callBackBegin}$strJavaScript")
             }

@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.viewbinding.ViewBinding
 import com.gnbsoftec.dolphinnative.common.DolphinApplication
-import com.gnbsoftec.dolphinnative.util.Glog
+import com.gnbsoftec.dolphinnative.util.GLog
 import com.gnbsoftec.dolphinnative.util.PermissionUtil
 
 abstract class BaseActivity<T: ViewBinding>(@LayoutRes private val layoutId:Int): AppCompatActivity() {
@@ -33,7 +33,7 @@ abstract class BaseActivity<T: ViewBinding>(@LayoutRes private val layoutId:Int)
         context = applicationContext
         dolphinApplication = application as DolphinApplication
 
-        Glog.d("BaseActivity $activity , $layoutId")
+        GLog.d("BaseActivity $activity , $layoutId")
         binding = DataBindingUtil.setContentView(this@BaseActivity, layoutId)
 
         initView()

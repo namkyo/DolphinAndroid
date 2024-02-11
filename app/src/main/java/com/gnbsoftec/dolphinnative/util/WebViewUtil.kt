@@ -29,8 +29,6 @@ import android.widget.EditText
 import androidx.appcompat.view.ContextThemeWrapper
 import com.gnbsoftec.dolphinnative.R
 import com.gnbsoftec.dolphinnative.common.Constants
-import com.gnbsoftec.dolphinnative.fragment.CustomDialogAlertBindingInterface
-import com.gnbsoftec.dolphinnative.fragment.CustomDialogAlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 object WebViewUtil {
@@ -72,11 +70,11 @@ object WebViewUtil {
     fun setupWebViewClient(activity: Activity, appOpenFunc: () -> Unit): WebViewClient {
         return object : WebViewClient(){
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                Glog.d("onPageStarted : $url")
+                GLog.d("onPageStarted : $url")
                 LoadingUtil.showLoading(activity)
             }
             override fun onPageFinished(view: WebView?, url: String?) {
-                Glog.d("onPageFinished : $url")
+                GLog.d("onPageFinished : $url")
 
                 //페이지가 로드가 완료시 앱 오픈처리
                 if(!appOpen){
@@ -91,7 +89,7 @@ object WebViewUtil {
              */
             override fun onUnhandledKeyEvent(view: WebView, event: KeyEvent?) {
                 val keyCode = "${event?.keyCode}"
-                Glog.d("onUnhandledKeyEvent.keyCode = $keyCode")
+                GLog.d("onUnhandledKeyEvent.keyCode = $keyCode")
 
                 /**
                  * 모바일키패드 이동,엔터 시 키패드 닫기
@@ -109,7 +107,7 @@ object WebViewUtil {
                 handler: SslErrorHandler?,
                 error: SslError?
             ) {
-                Glog.e("ssL 서버에러 : $error")
+                GLog.e("ssL 서버에러 : $error")
 
                 val msg = when(error?.primaryError){
                     SslError.SSL_EXPIRED->"[SSL_EXPIRED] 이 사이트의 보안 인증서는 신뢰할수 없습니다."
@@ -118,8 +116,8 @@ object WebViewUtil {
                     SslError.SSL_UNTRUSTED->"[SSL_UNTRUSTED] 이 사이트의 보안 인증서는 신뢰할수 없습니다."
                     else -> "[${error?.primaryError}] 이 사이트의 보안 인증서는 신뢰할수 없습니다."
                 }
-                Glog.d("SSL 에러 : $msg")
-                Glog.d("SSL 에러 : ${view?.url}")
+                GLog.d("SSL 에러 : $msg")
+                GLog.d("SSL 에러 : ${view?.url}")
             }
         }
     }
@@ -176,7 +174,7 @@ object WebViewUtil {
                 super.onCloseWindow(window)
             }
             override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
-                Glog.d("${consoleMessage?.message()}")
+                GLog.d("${consoleMessage?.message()}")
                 return super.onConsoleMessage(consoleMessage)
             }
 

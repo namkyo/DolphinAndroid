@@ -1,7 +1,6 @@
 package com.gnbsoftec.dolphinnative.util
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,7 +10,6 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 object PermissionUtil {
@@ -60,7 +58,7 @@ object PermissionUtil {
     fun responsePermission(activity: ComponentActivity, permissionSettingResult: ActivityResultLauncher<Intent>): ActivityResultLauncher<Array<String>> {
         return activity.registerForActivityResult(contractMulti) { resultMap ->
             val isAllGranted = permissionList!!.all { e -> resultMap[e] == true }
-            Glog.d("isAllGranted : $isAllGranted")
+            GLog.d("isAllGranted : $isAllGranted")
             if(isAllGranted){
                 permissionCallback!!(true)
             }else{
@@ -75,7 +73,7 @@ object PermissionUtil {
                         ErrorUtil.errorPress(e)
                     }
                 }, mCancelCallback = {
-                    Glog.d("권한 허용안함")
+                    GLog.d("권한 허용안함")
                 })
             }
         }
@@ -105,7 +103,7 @@ object PermissionUtil {
                 permission
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Glog.d("권한거부 : $permission")
+            GLog.d("권한거부 : $permission")
             arr.add(permission)
         }
     }

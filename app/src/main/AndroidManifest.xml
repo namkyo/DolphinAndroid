@@ -64,7 +64,7 @@
 
         <!-- FCM 푸쉬 -->
         <service
-            android:name=".service.FCMService"
+            android:name=".service.FcmService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
