@@ -52,8 +52,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         GLog.d("BuildConfig.BUILD_TYPE                  : " + BuildConfig.BUILD_TYPE)
         GLog.d("Constants.IS_REAL                       : " + Constants.IS_REAL)
         GLog.d("Constants.IS_DEBUG                      : " + Constants.IS_DEBUG)
+        GLog.d("TOKEN                                   : " + PreferenceUtil.getValue(context.applicationContext, PreferenceUtil.keys.PUSH_KEY,""))
 //        Glog.d("Constants.launchUrl                     : " + Constants.getWebViewHost())
         GLog.d("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+
 
         val urlStr = if(TextUtils.isEmpty(intent.extras?.getString(Constants.pushIntentData.pushUrl))){
             Constants.SERVER_URL

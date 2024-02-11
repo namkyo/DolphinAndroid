@@ -1,6 +1,7 @@
 package com.gnbsoftec.dolphinnative.service
 
 import android.text.TextUtils
+import com.gnbsoftec.dolphinnative.common.Constants
 import com.gnbsoftec.dolphinnative.extension.parseModel
 import com.gnbsoftec.dolphinnative.util.GLog
 import com.gnbsoftec.dolphinnative.util.NotificationUtil
@@ -23,7 +24,7 @@ class FcmService : FirebaseMessagingService() {
         //푸쉬 수신 허용여부 처음 설치시 Y
         PreferenceUtil.put(this@FcmService.applicationContext, PreferenceUtil.keys.PUSH_YN,"Y")
 
-        FirebaseMessaging.getInstance().subscribeToTopic("orix_dev")
+        FirebaseMessaging.getInstance().subscribeToTopic(Constants.TOPIC)
             .addOnCompleteListener { task ->
                 var msg = "Subscription successful"
                 if (!task.isSuccessful) {

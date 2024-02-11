@@ -13,6 +13,8 @@ object Constants {
 
     const val IS_DEBUG   =   true
 
+    const val TOPIC      =  "GNB"
+
     //웹뷰 캐시 모드
     val webViewCacheMode = if(IS_REAL){
         WebSettings.LOAD_DEFAULT
