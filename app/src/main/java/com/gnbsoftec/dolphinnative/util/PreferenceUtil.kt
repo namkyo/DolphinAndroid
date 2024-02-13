@@ -2,7 +2,7 @@ package com.gnbsoftec.dolphinnative.util
 
 import android.app.Activity
 import android.content.Context
-import java.util.*
+import java.util.HashSet
 
 object PreferenceUtil {
     private const val PREF_KEY = "HSBPrefs"

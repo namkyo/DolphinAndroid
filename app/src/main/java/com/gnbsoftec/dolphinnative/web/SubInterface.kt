@@ -1,8 +1,8 @@
-package com.gallery.orix.web
+package com.gnbsoftec.dolphinnative.web
 
-import com.gallery.orix.extension.toJsonString
-import com.gallery.orix.util.GLog
-import com.gallery.orix.view.WebViewActivity
+import com.gnbsoftec.dolphinnative.extension.toJsonString
+import com.gnbsoftec.dolphinnative.util.GLog
+import com.gnbsoftec.dolphinnative.view.WebViewActivity
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 

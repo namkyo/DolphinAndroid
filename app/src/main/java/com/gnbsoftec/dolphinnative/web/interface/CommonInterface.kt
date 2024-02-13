@@ -1,22 +1,42 @@
-package com.gallery.orix.web.`interface`
+package com.gnbsoftec.dolphinnative.web.`interface`
 
 import android.webkit.JavascriptInterface
-import com.gallery.orix.BuildConfig
-import com.gallery.orix.common.Constants
-import com.gallery.orix.manager.CameraManager
-import com.gallery.orix.manager.PickerManager
-import com.gallery.orix.util.FileUtil
-import com.gallery.orix.util.GLog
-import com.gallery.orix.util.LoadingUtil
-import com.gallery.orix.util.NotificationUtil
-import com.gallery.orix.util.PermissionUtil
-import com.gallery.orix.util.PreferenceUtil
-import com.gallery.orix.util.TelUtil
-import com.gallery.orix.util.ToastUtil
-import com.gallery.orix.web.SubInterface
-import com.gallery.orix.web.model.InterfaceModel
+import com.gnbsoftec.dolphinnative.BuildConfig
+import com.gnbsoftec.dolphinnative.common.Constants
+import com.gnbsoftec.dolphinnative.extension.toJsonString
+import com.gnbsoftec.dolphinnative.manager.CameraManager
+import com.gnbsoftec.dolphinnative.manager.PickerManager
+import com.gnbsoftec.dolphinnative.util.FileUtil
+import com.gnbsoftec.dolphinnative.util.GLog
+import com.gnbsoftec.dolphinnative.util.LoadingUtil
+import com.gnbsoftec.dolphinnative.util.NotificationUtil
+import com.gnbsoftec.dolphinnative.util.PermissionUtil
+import com.gnbsoftec.dolphinnative.util.PreferenceUtil
+import com.gnbsoftec.dolphinnative.util.TelUtil
+import com.gnbsoftec.dolphinnative.util.ToastUtil
+import com.gnbsoftec.dolphinnative.web.SubInterface
+import com.gnbsoftec.dolphinnative.web.model.InterfaceModel
+import com.google.gson.Gson
 
 interface CommonInterface : SubInterface {
+
+    @JavascriptInterface
+    fun excute(inputData: String,succFunc: String, failFunc: String) {
+        GLog.d("inputData : $inputData")
+        GLog.d("succFunc : $succFunc")
+        GLog.d("failFunc : $failFunc")
+
+        val json = Gson().toJson(HashMap<String,Any>().apply {
+            put("resultCd",codeSucc0000)
+            put("resultMsg",descSucc)
+            put("params",HashMap<String,String>().apply {
+                put("token",PreferenceUtil.getValue(webViewActivity.applicationContext,PreferenceUtil.keys.PUSH_KEY,""))
+            })
+        })
+        val callScript = "javascript:$succFunc(JSON.parse(JSON.stringify(${json.toJsonString()})));"
+        GLog.d("callbackScript : $callScript")
+        webViewActivity.loadURL(callScript)
+    }
     /**
      * [1] : 기기정보 조회
      */

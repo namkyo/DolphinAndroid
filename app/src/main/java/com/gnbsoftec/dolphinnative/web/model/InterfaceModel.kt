@@ -1,4 +1,4 @@
-package com.gallery.orix.web.model
+package com.gnbsoftec.dolphinnative.web.model
 
 object InterfaceModel {
     interface BaseInput {

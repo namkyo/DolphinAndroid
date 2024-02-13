@@ -1,10 +1,12 @@
-package com.gallery.orix.web.`interface`
+package com.gnbsoftec.dolphinnative.web.`interface`
 
 import android.webkit.JavascriptInterface
+import com.gnbsoftec.dolphinnative.BuildConfig
 import com.gnbsoftec.dolphinnative.db.DbUtil
-import com.gallery.orix.web.SubInterface
-import com.gallery.orix.web.model.InterfaceModel
 import com.gnbsoftec.dolphinnative.util.GLog
+import com.gnbsoftec.dolphinnative.util.TelUtil
+import com.gnbsoftec.dolphinnative.web.SubInterface
+import com.gnbsoftec.dolphinnative.web.model.InterfaceModel
 import com.google.firebase.messaging.FirebaseMessaging
 
 interface PushInterface : SubInterface {

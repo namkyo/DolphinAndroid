@@ -1,41 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".view.CameraPreviewActivity">
-    <ImageView
-        android:id="@+id/imageViewPhoto"
-        android:layout_weight="4"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100sp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/prev"
+        <ImageView
+            android:id="@+id/previewImgView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/view_border_2"
-            android:textColor="@color/black"
-            android:text="다시찍기"
-            android:fontFamily="@font/gmarketsansttfbold"
-            android:textSize="20sp"
-            android:layout_weight="1"/>
-        <Button
-            android:id="@+id/next"
+            android:contentDescription="이미지 미리보기"
+            app:layout_constraintBottom_toBottomOf="@+id/camera_btns"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <LinearLayout
+            android:id="@+id/camera_btns"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/view_border_1"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:text="전송"
-            android:fontFamily="@font/gmarketsansttfbold"
-            android:layout_weight="1"/>
-    </LinearLayout>
-</LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/prev"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/pretendard_bold"
+                android:background="@color/color_alert_cancel"
+                android:text="재 촬 영"
+                android:contentDescription="재 촬 영"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/next"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/color_toast"
+                android:text="전 송"
+                android:contentDescription="전 송"
+                android:fontFamily="@font/pretendard_bold"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                />
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

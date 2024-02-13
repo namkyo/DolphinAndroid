@@ -1,7 +1,6 @@
 package com.gnbsoftec.dolphinnative.util
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Bitmap
@@ -16,6 +15,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.webkit.ConsoleMessage
+import android.webkit.CookieManager
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.SslErrorHandler
@@ -29,6 +29,8 @@ import android.widget.EditText
 import androidx.appcompat.view.ContextThemeWrapper
 import com.gnbsoftec.dolphinnative.R
 import com.gnbsoftec.dolphinnative.common.Constants
+import com.gnbsoftec.dolphinnative.manager.InputFileManager
+import com.gnbsoftec.dolphinnative.view.WebViewActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 object WebViewUtil {
@@ -36,6 +38,10 @@ object WebViewUtil {
 
     @SuppressLint("SetJavaScriptEnabled")
     fun setupWebView(webView: WebView) {
+
+        val cookieManager: CookieManager = CookieManager.getInstance()
+        cookieManager.setAcceptCookie(true)
+
         // 웹뷰 설정을 위한 WebSettings 인스턴스 가져오기
         webView.settings.apply {
             // JavaScript 활성화
@@ -65,13 +71,13 @@ object WebViewUtil {
                 safeBrowsingEnabled                     =   true
             }
         }
+        cookieManager.setAcceptThirdPartyCookies(webView, false)
     }
 
-    fun setupWebViewClient(activity: Activity, appOpenFunc: () -> Unit): WebViewClient {
+    fun setupWebViewClient(context: Context, appOpenFunc: () -> Unit): WebViewClient {
         return object : WebViewClient(){
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 GLog.d("onPageStarted : $url")
-                LoadingUtil.showLoading(activity)
             }
             override fun onPageFinished(view: WebView?, url: String?) {
                 GLog.d("onPageFinished : $url")
@@ -81,7 +87,11 @@ object WebViewUtil {
                     appOpenFunc()
                     appOpen=true
                 }
-                LoadingUtil.hideLoading()
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                GLog.d("URL 들어옴 1 ${view.url}")
+                return false
             }
 
             /**
@@ -95,7 +105,7 @@ object WebViewUtil {
                  * 모바일키패드 이동,엔터 시 키패드 닫기
                  */
                 if(event?.keyCode == KeyEvent.KEYCODE_ENTER){
-                    val imm = activity.applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(view.windowToken,0)
                 }
                 return
@@ -126,17 +136,17 @@ object WebViewUtil {
      * 웹뷰 UI 리스너 기능
      * 안씀
      */
-    fun setupWebChromeClient(context:Context): WebChromeClient {
+    fun setupWebChromeClient(context: Context, webViewActivity: WebViewActivity): WebChromeClient {
         return object: WebChromeClient() {
             override fun onShowFileChooser(
                 webView: WebView?,
                 filePathCallback: ValueCallback<Array<Uri>>?,
                 fileChooserParams: FileChooserParams?
             ): Boolean {
-                val allowMultiple = fileChooserParams?.mode == FileChooserParams.MODE_OPEN_MULTIPLE
-//                tempFilePathCallback = filePathCallback
-//                tempAllowMultiple = allowMultiple
-//                requestPermission(null, filePathCallback, allowMultiple)
+                InputFileManager.setCallBack(filePathCallback)
+                
+                //input "File" 대응
+                webViewActivity.openInputFile()
                 return true
             }
 
@@ -153,7 +163,10 @@ object WebViewUtil {
                     dialog.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
 
                     subWV.webViewClient = object : WebViewClient() {
-                        override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean { return false }
+                        override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                            GLog.d("URL 들어옴 2 ${view.url}")
+                            return false
+                        }
                     }
                     subWV.webChromeClient = object: WebChromeClient() {
                         override fun onCloseWindow(window: WebView?) {

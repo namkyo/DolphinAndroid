@@ -1,9 +1,9 @@
 package com.gnbsoftec.dolphinnative.common
 
 import android.content.Context
-import android.os.Environment
 import android.webkit.WebSettings
 import com.gnbsoftec.dolphinnative.util.GLog
+import com.gnbsoftec.dolphinnative.BuildConfig
 
 object Constants {
     //운영,개발모드
@@ -12,40 +12,27 @@ object Constants {
     const val callScript = "gnb"
 
     const val IS_DEBUG   =   true
+    //웹뷰로드시 캐시 삭제대상
+    const val jsessionId = "JSESSIONID="
 
-    const val TOPIC      =  "GNB"
+    const val topic = "gnb"
 
     //웹뷰 캐시 모드
     val webViewCacheMode = if(IS_REAL){
         WebSettings.LOAD_DEFAULT
     }else{
-        WebSettings.LOAD_DEFAULT
+        WebSettings.LOAD_NO_CACHE
     }
-
-
-    const val SERVER_URL: String = "http://175.209.155.74:8180/login.frm"
-
-    val FILE_SAVE_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
-
-    const val FILE_SAVE_SUB_PATH = "/GNB/"
-
-    object pushIntentData {
-        const val pushUrl: String = "pushUrl"
-        const val title: String = "title"
-        const val body: String = "body"
-        const val image: String = "image"
-    }
-
 
 
     // 메인웹뷰 URL
-//    fun getWebViewHost() : String {
-//        return if (IS_REAL) {
-//            BuildConfig.prodUrl
-//        }else{
-//            BuildConfig.devUrl
-//        }
-//    }
+    fun getWebViewHost() : String {
+        return if (IS_REAL) {
+            BuildConfig.prodUrl
+        }else{
+            BuildConfig.devUrl
+        }
+    }
 
     /**
      * 폴드 펼친화면 여부
@@ -72,5 +59,9 @@ object Constants {
                 false
             }
         }
+    }
+
+    object keys {
+        const val imgKey = "imgKey"
     }
 }

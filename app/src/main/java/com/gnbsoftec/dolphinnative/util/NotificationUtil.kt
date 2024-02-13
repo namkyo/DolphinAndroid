@@ -14,8 +14,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 object NotificationUtil {
-    private val channelId = "channel_gnb"
-    private val channelName = "gnb"
+    private val channelId = "channel_dolphin"
+    private val channelName = "dolphin"
     private val groupKey  = BuildConfig.APPLICATION_ID+".NOTIFICATION_GROUP"
 
 
@@ -102,7 +102,7 @@ object NotificationUtil {
     private fun getBaseNotificationBuilder(context: Context, title: String, message: String, channelId: String): NotificationCompat.Builder {
         val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         return NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher) // 아이콘 설정
+            .setSmallIcon(R.mipmap.ic_dolphin) // 아이콘 설정
             .setAutoCancel(true)
             .setSound(soundUri) // 알림 소리
             .setContentTitle(title)

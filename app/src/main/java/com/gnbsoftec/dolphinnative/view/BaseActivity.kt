@@ -3,12 +3,16 @@ package com.gnbsoftec.dolphinnative.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import com.gnbsoftec.dolphinnative.common.DolphinApplication
 import com.gnbsoftec.dolphinnative.util.GLog
@@ -32,7 +36,6 @@ abstract class BaseActivity<T: ViewBinding>(@LayoutRes private val layoutId:Int)
         activity = this@BaseActivity
         context = applicationContext
         dolphinApplication = application as DolphinApplication
-
         GLog.d("BaseActivity $activity , $layoutId")
         binding = DataBindingUtil.setContentView(this@BaseActivity, layoutId)
 
@@ -76,4 +79,32 @@ abstract class BaseActivity<T: ViewBinding>(@LayoutRes private val layoutId:Int)
         Toast.makeText(this,msg, Toast.LENGTH_SHORT).show()
     }
 
+    protected fun loading(activity: AppCompatActivity, isHide: Boolean, delay: Long, callback: () -> Unit) {
+        val handler = Handler(Looper.getMainLooper())
+
+        activity.runOnUiThread {
+            if (!activity.isFinishing && !activity.isDestroyed) {
+//                if (!LoadingUtil.isShow()) {
+//                    LoadingUtil.showLoading(activity)
+//                }
+
+                handler.postDelayed({
+                    if (!activity.isFinishing && !activity.isDestroyed) {
+//                        if (isHide) {
+//                            LoadingUtil.hideLoading()
+//                        }
+                        callback()
+                    }
+                }, delay)
+            }
+        }
+
+        // 액티비티가 종료될 때 핸들러의 메시지와 콜백을 취소하기 위한 처리
+        activity.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onDestroy(owner: LifecycleOwner) {
+                super.onDestroy(owner)
+                handler.removeCallbacksAndMessages(null)
+            }
+        })
+    }
 }

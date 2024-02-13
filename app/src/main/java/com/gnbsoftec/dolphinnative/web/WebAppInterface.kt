@@ -1,8 +1,8 @@
-package com.gallery.orix.web
+package com.gnbsoftec.dolphinnative.web
 
 import androidx.appcompat.app.AppCompatActivity
-import com.gallery.orix.view.WebViewActivity
-import com.gallery.orix.web.`interface`.CommonInterface
+import com.gnbsoftec.dolphinnative.view.WebViewActivity
+import com.gnbsoftec.dolphinnative.web.`interface`.CommonInterface
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 

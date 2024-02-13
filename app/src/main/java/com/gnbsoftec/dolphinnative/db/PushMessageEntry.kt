@@ -1,4 +1,4 @@
-package com.gallery.orix.db
+package com.gnbsoftec.dolphinnative.db
 
 object PushMessageEntry {
     const val TABLE_NAME = "push_messages"

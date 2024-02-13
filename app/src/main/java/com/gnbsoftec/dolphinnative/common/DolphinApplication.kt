@@ -5,6 +5,7 @@ import android.app.Application
 import android.os.Bundle
 import com.gnbsoftec.dolphinnative.BuildConfig
 import com.gnbsoftec.dolphinnative.util.GLog
+import com.gnbsoftec.dolphinnative.util.LoadingUtil
 import timber.log.Timber
 
 class DolphinApplication : Application(), Application.ActivityLifecycleCallbacks {
@@ -48,5 +49,6 @@ class DolphinApplication : Application(), Application.ActivityLifecycleCallbacks
 
     override fun onActivityDestroyed(activity: Activity) {
         GLog.d("onActivityDestroyed : ${activity.localClassName}")
+        LoadingUtil.hideLoading()
     }
 }

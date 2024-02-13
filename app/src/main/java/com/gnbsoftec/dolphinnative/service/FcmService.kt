@@ -25,7 +25,7 @@ class FcmService : FirebaseMessagingService() {
         //푸쉬 수신 허용여부 처음 설치시 Y
         PreferenceUtil.put(this@FcmService.applicationContext, PreferenceUtil.keys.PUSH_YN,"Y")
 
-        FirebaseMessaging.getInstance().subscribeToTopic("orix_dev")
+        FirebaseMessaging.getInstance().subscribeToTopic(Constants.topic)
             .addOnCompleteListener { task ->
                 var msg = "Subscription successful"
                 if (!task.isSuccessful) {
@@ -41,7 +41,7 @@ class FcmService : FirebaseMessagingService() {
 
         val fcmMessage = remoteMessage.data.parseModel(FcmModel.Message::class.java)
         GLog.d("FCM fcmMessage: $fcmMessage")
-
+        
         //푸쉬 수신여부 체크
         if(fcmMessage!=null && "Y"==PreferenceUtil.getValue(this@FcmService.applicationContext, PreferenceUtil.keys.PUSH_YN,"N")){
             DbUtil.insertPushMessage(this@FcmService.applicationContext,fcmMessage)

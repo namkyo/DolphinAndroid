@@ -1,4 +1,4 @@
-package com.gallery.orix.db
+package com.gnbsoftec.dolphinnative.db
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

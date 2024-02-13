@@ -1,11 +1,13 @@
 package com.gnbsoftec.dolphinnative.util
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.gnbsoftec.dolphinnative.databinding.DialogLoadingBinding
 

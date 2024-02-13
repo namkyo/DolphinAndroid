@@ -1,11 +1,10 @@
 package com.gnbsoftec.dolphinnative.util
 
 import com.gnbsoftec.dolphinnative.common.Constants
-import com.gnbsoftec.dolphinnative.BuildConfig
 import timber.log.Timber
 
 object GLog {
-    private const val TAG = BuildConfig.APPLICATION_ID
+    private const val TAG = "dolphinLog"
     fun d(message: String) {
         if (Constants.IS_DEBUG) Timber.tag(TAG).d(buildLogMessage(message))
     }
