@@ -14,8 +14,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 object NotificationUtil {
-    private val channelId = "channel_orix"
-    private val channelName = "orix"
+    private val channelId = "channel_gnb"
+    private val channelName = "gnb"
     private val groupKey  = BuildConfig.APPLICATION_ID+".NOTIFICATION_GROUP"
 
 

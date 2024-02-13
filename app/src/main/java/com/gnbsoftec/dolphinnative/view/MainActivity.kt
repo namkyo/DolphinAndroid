@@ -150,6 +150,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             webChromeClient = WebViewUtil.setupWebChromeClient(context)
 //            addJavascriptInterface(WebAppInterface(activity), Constants.callScript)
             addJavascriptInterface(NativeBridge(activity), "ftBridge")
+            addJavascriptInterface(NativeBridge(activity), Constants.callScript)
         }
     }
 

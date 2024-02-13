@@ -2,6 +2,7 @@ package com.gnbsoftec.dolphinnative.service
 
 import android.text.TextUtils
 import com.gnbsoftec.dolphinnative.common.Constants
+import com.gnbsoftec.dolphinnative.db.DbUtil
 import com.gnbsoftec.dolphinnative.extension.parseModel
 import com.gnbsoftec.dolphinnative.util.GLog
 import com.gnbsoftec.dolphinnative.util.NotificationUtil
@@ -24,7 +25,7 @@ class FcmService : FirebaseMessagingService() {
         //푸쉬 수신 허용여부 처음 설치시 Y
         PreferenceUtil.put(this@FcmService.applicationContext, PreferenceUtil.keys.PUSH_YN,"Y")
 
-        FirebaseMessaging.getInstance().subscribeToTopic(Constants.TOPIC)
+        FirebaseMessaging.getInstance().subscribeToTopic("orix_dev")
             .addOnCompleteListener { task ->
                 var msg = "Subscription successful"
                 if (!task.isSuccessful) {
@@ -36,18 +37,14 @@ class FcmService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         val pushYn = PreferenceUtil.getValue(this@FcmService.applicationContext, PreferenceUtil.keys.PUSH_YN,"N")
-        GLog.d("FCM pushY:$pushYn , remoteMessage: ${remoteMessage.data}")
-        GLog.d("FCM pushY:$pushYn , remoteMessage: ${remoteMessage.notification}")
-        GLog.d("FCM pushY:$pushYn , remoteMessage: ${remoteMessage.messageType}")
+        GLog.d("FCM push수신여부 : $pushYn , remoteMessage: ${remoteMessage.data}")
 
-//        val fcmMessage = remoteMessage.data.parseModel(FcmModel.Message::class.java)
-        val fcmMessage = FcmModel.Message(remoteMessage.data["pushTitle"]!!
-        ,remoteMessage.data["pushMessage"]!!
-        ,remoteMessage.data["pushImageUrl"]!!
-        ,remoteMessage.data["pushClickLink"]!!)
+        val fcmMessage = remoteMessage.data.parseModel(FcmModel.Message::class.java)
         GLog.d("FCM fcmMessage: $fcmMessage")
 
+        //푸쉬 수신여부 체크
         if(fcmMessage!=null && "Y"==PreferenceUtil.getValue(this@FcmService.applicationContext, PreferenceUtil.keys.PUSH_YN,"N")){
+            DbUtil.insertPushMessage(this@FcmService.applicationContext,fcmMessage)
             //이미지 푸쉬
             if(TextUtils.isEmpty(fcmMessage.pushImageUrl)){
                 NotificationUtil.showTextNotification(this@FcmService,fcmMessage.pushTitle,fcmMessage.pushMessage)

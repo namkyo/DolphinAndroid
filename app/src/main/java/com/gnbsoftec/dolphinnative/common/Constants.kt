@@ -9,7 +9,7 @@ object Constants {
     //운영,개발모드
     const val IS_REAL   =   false
 
-    const val callScript = "orix"
+    const val callScript = "gnb"
 
     const val IS_DEBUG   =   true
 
