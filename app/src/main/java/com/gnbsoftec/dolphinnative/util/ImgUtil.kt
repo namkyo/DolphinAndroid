@@ -24,13 +24,25 @@ object ImgUtil {
     /**
      * uri => Bitmap
      */
-    fun uriToBitmap(context: Context, uri: Uri): Bitmap {
-        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver,uri))
-        }else{
-            @Suppress("DEPRECATION") MediaStore.Images.Media.getBitmap(context.contentResolver,uri)
+//    fun uriToBitmap(context: Context, uri: Uri): Bitmap {
+//        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver,uri))
+//        }else{
+//            @Suppress("DEPRECATION") MediaStore.Images.Media.getBitmap(context.contentResolver,uri)
+//        }
+//        return bitmap
+//    }
+
+    fun uriToBitmap(context: Context, uri: Uri): Bitmap? {
+        return try {
+            GLog.d("uri : $uri")
+            context.contentResolver.openInputStream(uri).use { inputStream ->
+                BitmapFactory.decodeStream(inputStream)
+            }
+        } catch (e: Exception) {
+            ErrorUtil.errorPress(e)
+            null
         }
-        return bitmap
     }
 
     fun urlToBitmap(context: Context, pushImageUrl: String): Bitmap? {
@@ -137,7 +149,7 @@ object ImgUtil {
                 return Bitmap.createScaledBitmap(originalBitmap, width, height, true)
             }
         } catch (e: Exception) {
-            e.printStackTrace() // 로그에 오류 출력
+            ErrorUtil.errorPress(e)
             return null
         }
     }
@@ -170,7 +182,7 @@ object ImgUtil {
             // Bitmap을 Drawable로 변환하여 반환
             return BitmapDrawable(resizedBitmap)
         } catch (e: Exception) {
-            e.printStackTrace()
+            ErrorUtil.errorPress(e)
             return null
         }
     }
@@ -194,4 +206,5 @@ object ImgUtil {
         // 리사이즈된 비트맵 생성
         return Bitmap.createScaledBitmap(bitmap, width, height, true)
     }
+
 }

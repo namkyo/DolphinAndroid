@@ -13,7 +13,7 @@ android {
         applicationId = "com.gnbsoftec.dolphinnative"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0"
     }
     signingConfigs {
@@ -90,7 +90,7 @@ dependencies {
 
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
+    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-messaging")

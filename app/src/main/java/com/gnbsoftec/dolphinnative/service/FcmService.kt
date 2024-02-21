@@ -45,14 +45,8 @@ class FcmService : FirebaseMessagingService() {
         //푸쉬 수신여부 체크
         if(fcmMessage!=null && "Y"==PreferenceUtil.getValue(this@FcmService.applicationContext, PreferenceUtil.keys.PUSH_YN,"N")){
             DbUtil.insertPushMessage(this@FcmService.applicationContext,fcmMessage)
-            //이미지 푸쉬
-            if(TextUtils.isEmpty(fcmMessage.pushImageUrl)){
-                NotificationUtil.showTextNotification(this@FcmService,fcmMessage.pushTitle,fcmMessage.pushMessage)
-            }
-            //텍스트 푸쉬
-            else{
-                NotificationUtil.showImgNotification(this@FcmService,serviceScope,fcmMessage.pushTitle,fcmMessage.pushMessage,fcmMessage.pushImageUrl)
-            }
+            // 푸쉬
+            NotificationUtil.showNotiService(this@FcmService.applicationContext,serviceScope,fcmMessage)
         }
     }
 }

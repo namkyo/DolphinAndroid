@@ -8,6 +8,7 @@ import androidx.activity.OnBackPressedCallback
 import com.gnbsoftec.dolphinnative.R
 import com.gnbsoftec.dolphinnative.common.Constants
 import com.gnbsoftec.dolphinnative.databinding.ActivityCameraPreviewBinding
+import com.gnbsoftec.dolphinnative.util.BackPressUtil
 
 class CameraPreView : BaseActivity<ActivityCameraPreviewBinding>(R.layout.activity_camera_preview) {
     override fun onCreate(savedInstanceState: Bundle?) {

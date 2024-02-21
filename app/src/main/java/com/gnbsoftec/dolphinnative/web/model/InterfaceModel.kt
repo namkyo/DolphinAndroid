@@ -16,12 +16,12 @@ object InterfaceModel {
     data class InGetDeviceInfo(
         override val cmd: String,
         override val callback: String
-    ):BaseInput
+    ): BaseInput
     data class OutGetDeviceInfo(
         override val resultCd: String,
         override val resultMsg: String,
         val deviceInfo: Map<String,String>
-    ):BaseOutput
+    ): BaseOutput
     /**
      * [2] : 로딩 호출
      */
@@ -29,11 +29,11 @@ object InterfaceModel {
         override val cmd: String,
         override val callback: String,
         val flag: String
-    ):BaseInput
+    ): BaseInput
     data class OutLoading(
         override val resultCd: String,
         override val resultMsg: String
-    ):BaseOutput
+    ): BaseOutput
     /**
      * [3] : 내부저장소 데이터 적재
      */
@@ -41,11 +41,11 @@ object InterfaceModel {
         override val cmd: String,
         override val callback: String,
         val data: Map<String,String>
-    ):BaseInput
+    ): BaseInput
     data class OutSetLocalStorage(
         override val resultCd: String,
         override val resultMsg: String
-    ):BaseOutput
+    ): BaseOutput
 
     /**
      * [4] : 내부저장소 데이터 조회
@@ -54,12 +54,12 @@ object InterfaceModel {
         override val cmd: String,
         override val callback: String,
         val keys: List<String>
-    ):BaseInput
+    ): BaseInput
     data class OutGetLocalStorage(
         override val resultCd: String,
         override val resultMsg: String,
         val value: Map<String,String>
-    ):BaseOutput
+    ): BaseOutput
 
     /**
      * [5] : 갤러리 이미지 조회
@@ -67,24 +67,24 @@ object InterfaceModel {
     data class InGetGalleryImage(
         override val cmd: String,
         override val callback: String
-    ):BaseInput
+    ): BaseInput
     data class OutGetGalleryImage(
         override val resultCd: String,
         override val resultMsg: String,
         val images: List<Map<String,String>>
-    ):BaseOutput
+    ): BaseOutput
     /**
      * [6] : 일반카메라 조회
      */
     data class InGetCameraImage(
         override val cmd: String,
         override val callback: String
-    ):BaseInput
+    ): BaseInput
     data class OutGetCameraImage(
         override val resultCd: String,
         override val resultMsg: String,
         val images: List<Map<String,String>>
-    ):BaseOutput
+    ): BaseOutput
 
     /**
      * [7] : 파일다운로드 url
@@ -93,11 +93,11 @@ object InterfaceModel {
         override val cmd: String,
         override val callback: String,
         val fileUrl: String
-    ):BaseInput
+    ): BaseInput
     data class OutUrlFileDownload(
         override val resultCd: String,
         override val resultMsg: String
-    ):BaseOutput
+    ): BaseOutput
     /**
      * [8] : 파일다운로드 base64
      */
@@ -106,35 +106,35 @@ object InterfaceModel {
         override val callback: String,
         val fileName: String,
         val base64str: String
-    ):BaseInput
+    ): BaseInput
     data class OutBase64FileDownload(
         override val resultCd: String,
         override val resultMsg: String
-    ):BaseOutput
+    ): BaseOutput
     /**
      * [9] : 퍼미션 상태 조회
      */
     data class InPermissionSelect(
         override val cmd: String,
         override val callback: String
-    ):BaseInput
+    ): BaseInput
     data class OutPermissionSelect(
         override val resultCd: String,
         override val resultMsg: String,
-        val chkeckYn: String
-    ):BaseOutput
+        val checkYn: String
+    ): BaseOutput
     /**
      * [10] : 퍼미션 체크
      */
     data class InPermissionCheck(
         override val cmd: String,
         override val callback: String
-    ):BaseInput
+    ): BaseInput
     data class OutPermissionCheck(
         override val resultCd: String,
         override val resultMsg: String,
-        val chkeckYn: String
-    ):BaseOutput
+        val checkYn: String
+    ): BaseOutput
     /**
      * [11] : 토스트 메세지 출력
      */
@@ -142,11 +142,11 @@ object InterfaceModel {
         override val cmd: String,
         override val callback: String,
         val msg: String
-    ):BaseInput
+    ): BaseInput
     data class OutShowToast(
         override val resultCd: String,
         override val resultMsg: String
-    ):BaseOutput
+    ): BaseOutput
     /**
      * [12] : 알림 메세지 출력
      */
@@ -155,11 +155,11 @@ object InterfaceModel {
         override val callback: String,
         val title: String,
         val msg: String
-    ):BaseInput
+    ): BaseInput
     data class OutShowNotification(
         override val resultCd: String,
         override val resultMsg: String
-    ):BaseOutput
+    ): BaseOutput
 
 
     /**
@@ -167,15 +167,13 @@ object InterfaceModel {
      */
     data class InPushList(
         override val cmd: String,
-        override val callback: String,
-        val title: String,
-        val msg: String
-    ):BaseInput
+        override val callback: String
+    ): BaseInput
     data class OutPushList(
         override val resultCd: String,
         override val resultMsg: String,
         val list: List<Map<String,String>>
-    ):BaseOutput
+    ): BaseOutput
 
     /**
      * [14] : 푸쉬 전체 삭제
@@ -183,12 +181,12 @@ object InterfaceModel {
     data class InPushDelete(
         override val cmd: String,
         override val callback: String
-    ):BaseInput
+    ): BaseInput
     data class OutPushDelete(
         override val resultCd: String,
         override val resultMsg: String,
         val cnt: Int
-    ):BaseOutput
+    ): BaseOutput
 
     /**
      * [15] : 푸쉬 구독 명 변경
@@ -197,11 +195,11 @@ object InterfaceModel {
         override val cmd: String,
         override val callback: String,
         val topic:String
-    ):BaseInput
+    ): BaseInput
     data class OutPushTopicUpdate(
         override val resultCd: String,
         override val resultMsg: String,
         val topicYn:String,
         val topicMsg:String
-    ):BaseOutput
+    ): BaseOutput
 }

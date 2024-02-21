@@ -19,12 +19,12 @@ object CameraManager {
         val list = ArrayList<Map<String,String>>()
         GLog.d("카메라 화면 후 복귀")
         if (resultCode == Activity.RESULT_OK) {
-            data?.getStringExtra(Constants.keys.imgKey)?.let { imgUri->
+            data?.getStringExtra(Constants.keys.imgKey)?.let {imgUri->
                 ImgUtil.resizeImageFromUri(activity.applicationContext,Uri.parse(imgUri),1024)?.let {img->
                     ImgUtil.convertBitmapToBase64(img).let {base64Img->
                         GLog.d("카메라 후 복귀 ${base64Img.length}")
                         list.add(HashMap<String,String>().apply {
-                            put("imgName", "dolphin_"+ DateUtil.getTimestamp("yyyyMMddHHmmss")+".png")
+                            put("imgName", "gnb_"+ DateUtil.getTimestamp("yyyyMMddHHmmss")+".png")
                             put("imgStr",base64Img)
                         })
                     }

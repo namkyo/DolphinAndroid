@@ -10,6 +10,8 @@ object PreferenceUtil {
     object keys{
         const val PUSH_KEY = "PUSH_KEY" //푸쉬 UUID
         const val PUSH_YN = "PUSH_YN" //푸쉬 여용 여부 Y/N
+        const val PUSH_URL = "PUSH_URL"
+        const val LINK_DATA = "LINK_DATA"
     }
     fun put(context: Context,key: String, value: String) {
         val pref = context.getSharedPreferences(

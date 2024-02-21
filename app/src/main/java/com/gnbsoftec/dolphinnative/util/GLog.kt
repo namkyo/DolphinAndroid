@@ -4,7 +4,7 @@ import com.gnbsoftec.dolphinnative.common.Constants
 import timber.log.Timber
 
 object GLog {
-    private const val TAG = "dolphinLog"
+    private const val TAG = "gnbLog"
     fun d(message: String) {
         if (Constants.IS_DEBUG) Timber.tag(TAG).d(buildLogMessage(message))
     }

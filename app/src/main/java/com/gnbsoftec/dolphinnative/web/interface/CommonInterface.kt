@@ -37,6 +37,7 @@ interface CommonInterface : SubInterface {
         GLog.d("callbackScript : $callScript")
         webViewActivity.loadURL(callScript)
     }
+
     /**
      * [1] : 기기정보 조회
      */
@@ -368,7 +369,8 @@ interface CommonInterface : SubInterface {
         if (inParam?.msg != null) {
 
             // 3 - 데이터 처리
-            NotificationUtil.showTextNotification(webViewActivity.applicationContext,inParam.title,inParam.msg)
+            NotificationUtil.showNomalNoti(webViewActivity.applicationContext,inParam.title,inParam.msg)
+
             // 4 - 결과 전송
             val outParam = InterfaceModel.OutShowToast(codeSucc0000, descSucc)
             callbackScript(inParam.callback, inParam.cmd, gson.toJson(outParam))

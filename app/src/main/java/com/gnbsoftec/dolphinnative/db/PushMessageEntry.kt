@@ -8,6 +8,7 @@ object PushMessageEntry {
     const val COLUMN_NAME_TITLE = "title"
     const val COLUMN_NAME_MESSAGE = "message"
     const val COLUMN_NAME_IMAGE_URL = "image_url"
+    const val COLUMN_NAME_CODE = "code"
     const val COLUMN_NAME_CLICK_LINK = "click_link"
     const val COLUMN_NAME_PUSH_DATE = "push_date"
 
@@ -16,9 +17,11 @@ object PushMessageEntry {
                 "$COLUMN_NAME_ID INTEGER PRIMARY KEY," +
                 "$COLUMN_NAME_TITLE TEXT," +
                 "$COLUMN_NAME_MESSAGE TEXT," +
+                "$COLUMN_NAME_CODE TEXT," +
                 "$COLUMN_NAME_IMAGE_URL TEXT," +
                 "$COLUMN_NAME_CLICK_LINK TEXT," +
-                "$COLUMN_NAME_PUSH_DATE TEXT"
+                "$COLUMN_NAME_PUSH_DATE TEXT" +
+                ");"
 
     const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS $TABLE_NAME"
 }

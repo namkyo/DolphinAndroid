@@ -2,20 +2,20 @@ package com.gnbsoftec.dolphinnative.common
 
 import android.content.Context
 import android.webkit.WebSettings
-import com.gnbsoftec.dolphinnative.util.GLog
 import com.gnbsoftec.dolphinnative.BuildConfig
+import com.gnbsoftec.dolphinnative.util.GLog
 
 object Constants {
     //운영,개발모드
-    const val IS_REAL   =   false
+    const val IS_REAL   =   true
 
     const val callScript = "gnb"
+
+    const val topic = "GNB"
 
     const val IS_DEBUG   =   true
     //웹뷰로드시 캐시 삭제대상
     const val jsessionId = "JSESSIONID="
-
-    const val topic = "gnb"
 
     //웹뷰 캐시 모드
     val webViewCacheMode = if(IS_REAL){

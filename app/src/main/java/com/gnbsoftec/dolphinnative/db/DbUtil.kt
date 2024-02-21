@@ -16,6 +16,7 @@ object DbUtil {
                 put(PushMessageEntry.COLUMN_NAME_TITLE, pushMsg.pushTitle)
                 put(PushMessageEntry.COLUMN_NAME_MESSAGE, pushMsg.pushMessage)
                 put(PushMessageEntry.COLUMN_NAME_IMAGE_URL, pushMsg.pushImageUrl)
+                put(PushMessageEntry.COLUMN_NAME_CODE, pushMsg.pushCode)
                 put(PushMessageEntry.COLUMN_NAME_CLICK_LINK, pushMsg.pushClickLink)
                 put(PushMessageEntry.COLUMN_NAME_PUSH_DATE, DateUtil.getTimestamp("yyyyMMddHHmmss"))
             }.also { values ->

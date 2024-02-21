@@ -1,10 +1,13 @@
 package com.gnbsoftec.dolphinnative.view
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -48,6 +51,11 @@ abstract class BaseActivity<T: ViewBinding>(@LayoutRes private val layoutId:Int)
         permissionResult = PermissionUtil.responsePermission(this@BaseActivity,permissionSettingResult)
 
         initListener()
+
+
+        hideKeyboard(activity)
+        // 액션바 숨기기
+        supportActionBar?.hide()
     }
     /**
      * 뷰 셋팅
@@ -106,5 +114,12 @@ abstract class BaseActivity<T: ViewBinding>(@LayoutRes private val layoutId:Int)
                 handler.removeCallbacksAndMessages(null)
             }
         })
+    }
+
+    private fun hideKeyboard(activity: Activity) {
+        val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        // 현재 포커스를 가진 뷰에서 키보드를 숨깁니다. null인 경우 창 토큰에서 사용 중인 뷰를 사용합니다.
+        val view = activity.currentFocus ?: View(activity)
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

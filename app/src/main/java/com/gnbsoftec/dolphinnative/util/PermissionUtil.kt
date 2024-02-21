@@ -35,6 +35,8 @@ object PermissionUtil {
                 add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 add(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
+
+            add(Manifest.permission.CAMERA)
         }
     }
 

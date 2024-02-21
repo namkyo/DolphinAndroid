@@ -14,6 +14,9 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
+import com.gnbsoftec.dolphinnative.service.FcmModel
 import java.io.File
 import java.net.URLDecoder
 
@@ -115,21 +118,20 @@ object FileUtil {
             GLog.d("file.name : ${file.name}")
             GLog.d("file.isFile : ${file.isFile}")
             GLog.d("file.length : ${file.length()}")
-            Toast.makeText(activity, "다운로드 시작..", Toast.LENGTH_SHORT).show()
-//                        val view = (cordova.activity as MainActivity).getWebView().view
+            ToastUtil.show(activity, "${file.name} 다운로드 시작..", 1000)
+
             Handler(Looper.getMainLooper()).postDelayed({
-//                            Toast.makeText(activity, "${file.absolutePath} 다운로드 완료", Toast.LENGTH_SHORT).show()
-//                            ToastUtil.show(view ,cordova.activity.layoutInflater.inflate(R.layout.custom_toast_layout, null),"${file.absolutePath} 다운로드 완료",3000)
                 //갤러리 새로고침
                 scanFile(activity, file, mimeType)
+
                 callback(true,"정상 다운로드")
 
                 //알림띄우기
                 val imageYn = mimeType != "pdf"
-//                NotificationReceiver.showNotification(cordova.context,file.name,"다운로드완료",pathToUri(cordova.context,file),imageYn)
-                NotificationUtil.showTextNotification(activity.applicationContext,"오릭스캐피탈","다운로드완료")
+                NotificationUtil.showNotiActivity(activity.applicationContext,"오릭스캐피탈","${file.name} 다운로드완료",imageYn,file)
+
                 //실행할 코드
-            }, 2000)
+            }, 1000)
         }catch (e:Exception){
             GLog.e("에러",e)
             callback(false,e.message.toString())
@@ -154,5 +156,14 @@ object FileUtil {
      */
     private fun scanFile(ctxt: Context, f: File, mimeType: String) {
         MediaScannerConnection.scanFile(ctxt, arrayOf(f.absolutePath), arrayOf(mimeType), null)
+    }
+
+
+    fun fileToUri(context: Context,file: File):Uri{
+        return FileProvider.getUriForFile(
+            context,
+            "${context.applicationContext.packageName}.provider",
+            file
+        )
     }
 }

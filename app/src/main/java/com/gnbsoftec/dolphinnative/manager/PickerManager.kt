@@ -19,7 +19,7 @@ object PickerManager {
         if (resultCode == Activity.RESULT_OK) {
             data?.data?.let {imgUri->
                 val fileName = if(imgUri.lastPathSegment==null){
-                    ("dolphin_${DateUtil.getTimestamp("yyyyMMddHHmmss")}.png")
+                    ("gnb_${DateUtil.getTimestamp("yyyyMMddHHmmss")}.png")
                 }else{
                     imgUri.lastPathSegment!!
                 }

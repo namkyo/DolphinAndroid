@@ -91,8 +91,7 @@ class CameraView : BaseActivity<ActivityCameraViewBinding>(R.layout.activity_cam
         ){result ->
             GLog.d("카메라 화면 돌아옴 ${result.resultCode}")
             if(result.resultCode == RESULT_OK && result.data != null){
-                GLog.d("카메라 촬영 화면 종료 ${result.resultCode == RESULT_OK} ${result.data!!.getStringExtra(
-                    Constants.keys.imgKey)}")
+                GLog.d("카메라 촬영 화면 종료 ${result.resultCode == RESULT_OK} ${result.data!!.getStringExtra(Constants.keys.imgKey)}")
                 setResult(RESULT_OK,Intent().apply {
                     addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                     putExtra(Constants.keys.imgKey,result.data!!.getStringExtra(Constants.keys.imgKey))

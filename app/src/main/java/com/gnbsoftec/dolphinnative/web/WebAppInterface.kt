@@ -3,13 +3,14 @@ package com.gnbsoftec.dolphinnative.web
 import androidx.appcompat.app.AppCompatActivity
 import com.gnbsoftec.dolphinnative.view.WebViewActivity
 import com.gnbsoftec.dolphinnative.web.`interface`.CommonInterface
+import com.gnbsoftec.dolphinnative.web.`interface`.PushInterface
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 
 /**
  * 인터페이스 공통코드 구현
  */
-class WebAppInterface(private val activity: AppCompatActivity) : SubInterface , CommonInterface{
+class WebAppInterface(private val activity: AppCompatActivity) : SubInterface , CommonInterface, PushInterface{
     override val webViewActivity:WebViewActivity get() = activity as WebViewActivity
 
     override val codeSucc0000:String get() = "0000"
