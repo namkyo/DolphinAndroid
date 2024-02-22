@@ -7,15 +7,19 @@ import com.gnbsoftec.dolphinnative.util.GLog
 
 object Constants {
     //운영,개발모드
-    const val IS_REAL   =   true
+    const val IS_REAL   =   false
 
     const val callScript = "gnb"
 
     const val topic = "GNB"
 
     const val IS_DEBUG   =   true
+
     //웹뷰로드시 캐시 삭제대상
-    const val jsessionId = "JSESSIONID="
+    val initCookies = listOf<(String) -> Boolean>(
+        { it.contains("JSESSIONID=").not() },
+        { it.contains("DOLPHIN_INTR=").not() }
+    )
 
     //웹뷰 캐시 모드
     val webViewCacheMode = if(IS_REAL){

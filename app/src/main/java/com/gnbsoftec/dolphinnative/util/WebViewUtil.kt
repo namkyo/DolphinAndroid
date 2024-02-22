@@ -57,6 +57,8 @@ object WebViewUtil {
             // 캐시 모드 설정
             cacheMode = Constants.webViewCacheMode
 
+            mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW //https, http 호환 여부(https에서 http컨텐츠도 보여질수 있도록 함)
+
             // 기타 옵션 설정
             setSupportMultipleWindows               (true)  //새창 띄우기 허용
             domStorageEnabled = true // 로컬 스토리지 및 세션 스토리지 사용
@@ -136,9 +138,12 @@ object WebViewUtil {
                     ERROR_UNSUPPORTED_SCHEME -> "URL 스키마가 지원되지 않음"
                     else -> "알 수 없는 오류"
                 }
-                GLog.e("onReceivedError errorCode : $errorCode , description : $description")
-                AlertUtil.showAlert(context,"안내","[$errorCode]$description","재접속"){
-                    view.reload()
+                GLog.e("onReceivedError request:${request.url} errorCode : $errorCode , description : $description")
+
+                if(errorCode != ERROR_UNKNOWN){
+                    AlertUtil.showAlert(context,"안내","[$errorCode]$description url : ${request.url}","재접속"){
+                        view.reload()
+                    }
                 }
             }
             @SuppressLint("WebViewClientOnReceivedSslError")

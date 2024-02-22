@@ -34,6 +34,8 @@ object LoadingUtil {
                 }
 
                 (binding.loadingAnim.drawable as? AnimationDrawable)?.start()
+
+                binding.loadingGif.drawable
             }
 
             dialog?.show()

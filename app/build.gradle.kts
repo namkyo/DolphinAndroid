@@ -12,7 +12,7 @@ android {
         applicationId = "com.gnbsoftec.dolphinnative"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
+        versionCode = 1
         versionName = "1.0"
     }
     signingConfigs {
@@ -94,4 +94,7 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-messaging")
+
+    // Gif 이미지 로딩을 위한 라이브러리
+    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.17")
 }

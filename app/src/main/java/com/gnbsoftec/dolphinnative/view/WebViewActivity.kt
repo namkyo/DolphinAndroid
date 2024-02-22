@@ -24,6 +24,7 @@ import com.gnbsoftec.dolphinnative.manager.InputFileManager
 import com.gnbsoftec.dolphinnative.manager.PickerManager
 import com.gnbsoftec.dolphinnative.util.BackPressUtil
 import com.gnbsoftec.dolphinnative.util.CoroutineUtil
+import com.gnbsoftec.dolphinnative.util.FileUtil
 import com.gnbsoftec.dolphinnative.util.GLog
 import com.gnbsoftec.dolphinnative.util.ImgUtil
 import com.gnbsoftec.dolphinnative.util.PermissionUtil
@@ -31,6 +32,7 @@ import com.gnbsoftec.dolphinnative.util.PreferenceUtil
 import com.gnbsoftec.dolphinnative.util.ToastUtil
 import com.gnbsoftec.dolphinnative.util.WebViewUtil
 import com.gnbsoftec.dolphinnative.web.WebAppInterface
+import com.gnbsoftec.dolphinnative.web.model.InterfaceModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
@@ -74,24 +76,17 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>(R.layout.activity_w
             cookieManager.getCookie(Constants.getWebViewHost())?.let { cookies ->
                 // 쿠키 정보를 로그에 출력합니다.
                 GLog.d("Webview:cookies = $cookies")
-
-                // 모든 쿠키를 제거합니다. 콜백을 통해 성공 여부를 로그에 출력합니다.
-                cookieManager.removeAllCookies { success ->
-                    GLog.d("쿠키 지우기 성공: $success")
-                }
-
                 // 쿠키 문자열을 ";"로 분리하여 배열로 만듭니다.
                 val arrCookie = cookies.split(";")
-
                 // 분리된 쿠키 각각에 대해 조건을 검사합니다.
                 arrCookie.forEach { cookie ->
-                    // 'JSESSIONID'와 'DOLPHIN_INTR'이 포함되지 않은 쿠키는 다시 설정합니다.
-                    if (cookie.contains("JSESSIONID=").not()
-                        //&& cookie.contains("DOLPHIN_INTR=").not()
-                    ){
-                        val cookieName = cookie.split("=")[0].trim() + "=" // 쿠키 이름을 추출하고 값은 비웁니다.
-                        GLog.d("쿠키 다시 설정: $cookieName")
-                        cookieManager.setCookie(Constants.getWebViewHost(), cookieName)
+                    GLog.d("cookie = $cookie")
+                    val cookieData = cookie.split("=")
+                    val key = cookieData[0]
+                    //쿠키는 다시 설정합니다.
+                    if (key=="JSESSIONID") {
+                        GLog.d("쿠키 다시 설정: $key=")
+                        cookieManager.setCookie(Constants.getWebViewHost(), "$key=")
                     }
                 }
             }
@@ -159,6 +154,22 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>(R.layout.activity_w
             WebViewUtil.setupWebView(this)
             webViewClient = WebViewUtil.setupWebViewClient(context){
                 dolphinApplication.isWebViewLoad = true
+            }
+            /**
+             * 다운로드 리스너
+             */
+            setDownloadListener {url, userAgent, contentDisposition, mimetype, contentLength ->
+                GLog.d("다운로드 리스너 $url")
+                //상대경로 처리
+                val fileUrl = if(url.startsWith("http")){
+                    url
+                }else{
+                    Constants.getWebViewHost()+url
+                }
+                FileUtil.urlFileDownload(activity,fileUrl){result,msg->
+                    GLog.d("다운로드 결과 result=$result , msg=$msg")
+                }
+//                FileUtil.fileDownload(activity,url, userAgent, contentDisposition, mimetype, contentLength)
             }
             webChromeClient = WebViewUtil.setupWebChromeClient(context, (activity as WebViewActivity))
             addJavascriptInterface(WebAppInterface(activity), Constants.callScript)

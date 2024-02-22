@@ -14,6 +14,7 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.gnbsoftec.dolphinnative.service.FcmModel
@@ -165,5 +166,101 @@ object FileUtil {
             "${context.applicationContext.packageName}.provider",
             file
         )
+    }
+
+    /**
+     * 웹뷰에서 파일 다운로드 리스너
+     */
+    private const val myPath = "/Dolphin/"
+    fun fileDownload(activity: Activity,url:String, userAgent:String, contentDisposition:String, mimetype:String, contentLength:Long){
+        GLog.d("================setDownloadListener=================")
+        GLog.d("url = $url")
+        GLog.d("userAgent = $userAgent")
+        GLog.d("contentDisposition = $contentDisposition")
+        GLog.d("mimetype = $mimetype")
+        GLog.d("contentLength = $contentLength")
+
+        val downloadManager = activity.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as DownloadManager
+
+        // 파일명 정제 시작
+        val urlSplit = url.split("/")
+        val fileName = urlSplit[(urlSplit.size-1)]
+        // 파일명 정제 끝
+
+        val request = DownloadManager.Request(Uri.parse(url)).apply {
+            setMimeType(mimetype)
+            addRequestHeader("User-Agent", userAgent)
+            setDescription("파일 다운로드")
+            setAllowedOverMetered(true)//모바일네트워크가 연결되었을 때도 다운로드
+            setAllowedOverRoaming(true)
+            setTitle(fileName)
+            setRequiresCharging(false)
+            setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            allowScanningByMediaScanner()
+            getPath()
+            val fileSetName = myPath+fileName
+            GLog.d("fileName : $fileSetName")
+            setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileSetName)
+        }
+        registerDownloadReceiver(downloadManager, activity)
+
+        try {
+            downloadId = downloadManager.enqueue(request)
+//            mainActivity.showToast("다운로드 시작중..")
+        }catch (e:Exception){
+//            mainActivity.showToast("다운로드 에러")
+            ErrorUtil.errorPress(e)
+        }
+    }
+
+    /**
+     * 다운로드 상태 리시버
+     */
+    private var downloadId : Long = 0
+
+    private fun registerDownloadReceiver(downloadManager: DownloadManager, activity: Activity) {
+        val downloadReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1) ?: -1
+                when (intent?.action) {
+                    DownloadManager.ACTION_DOWNLOAD_COMPLETE -> {
+                        if(downloadId == id){
+                            val query: DownloadManager.Query = DownloadManager.Query()
+                            query.setFilterById(id)
+                            val cursor = downloadManager.query(query)
+                            if (!cursor.moveToFirst()) {
+                                return
+                            }
+                            val columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+                            val status = cursor.getInt(columnIndex)
+                            if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                                downloadId = 0
+//                                BitmapUtil.gallReload(mainActivity.applicationContext)
+//                                mainActivity.showToast("다운로드가 완료됐습니다.")
+                            } else if (status == DownloadManager.STATUS_FAILED) {
+                                downloadId = 0
+//                                mainActivity.showToast("다운로드가 실패했습니다.")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        IntentFilter().run {
+            addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                activity.applicationContext.registerReceiver(downloadReceiver, this, Context.RECEIVER_EXPORTED)
+            }else{
+                activity.applicationContext.registerReceiver(downloadReceiver, this, Context.RECEIVER_EXPORTED)
+            }
+        }
+    }
+
+    private fun getPath(): String {
+        val dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + myPath
+        val file = File(dirPath)
+        if (!file.exists())
+            file.mkdirs()
+        return dirPath
     }
 }

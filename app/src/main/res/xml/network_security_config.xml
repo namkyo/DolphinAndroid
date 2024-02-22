@@ -3,6 +3,7 @@
     <base-config cleartextTrafficPermitted="false" />
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">175.209.155.74</domain>
+        <domain includeSubdomains="true">175.209.155.74:8180</domain>
         <domain includeSubdomains="true">m.naver.com</domain>
     </domain-config>
 </network-security-config>
