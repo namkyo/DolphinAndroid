@@ -2,6 +2,7 @@ package com.gnbsoftec.dolphinnative.util
 
 import android.app.Activity
 import android.content.Context
+import com.google.gson.Gson
 import java.util.HashSet
 
 object PreferenceUtil {
@@ -51,6 +52,18 @@ object PreferenceUtil {
         val editor = pref.edit()
 
         editor.putStringSet(key, value)
+        editor.apply()
+    }
+
+    fun put(context: Context,key: String, value: Any) {
+        val pref = context.getSharedPreferences(
+            PREF_KEY,
+            Activity.MODE_PRIVATE
+        )
+        val editor = pref.edit()
+        val gson = Gson()
+        val jsonString = gson.toJson(value)
+        editor.putString(key, jsonString)
         editor.apply()
     }
 

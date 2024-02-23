@@ -17,9 +17,10 @@ import com.gnbsoftec.dolphinnative.util.ToastUtil
 import com.gnbsoftec.dolphinnative.web.SubInterface
 import com.gnbsoftec.dolphinnative.web.model.InterfaceModel
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
 
 interface CommonInterface : SubInterface {
-
     @JavascriptInterface
     fun excute(inputData: String,succFunc: String, failFunc: String) {
         GLog.d("inputData : $inputData")
@@ -136,8 +137,13 @@ interface CommonInterface : SubInterface {
 
             // 3 - 데이터 처리
             for(data in inParam.data){
-                GLog.d("저장소 적재 키:${data.key} , 값:${data.value}")
-                PreferenceUtil.put(webViewActivity.applicationContext,data.key,data.value)
+                if(data.value is String){
+                    GLog.d("저장소 적재1 키:${data.key} , 값:${data.value}")
+                    PreferenceUtil.put(webViewActivity.applicationContext,data.key,data.value as String)
+                }else{
+                    GLog.d("저장소 적재2 키:${data.key}")
+                    PreferenceUtil.put(webViewActivity.applicationContext,data.key,data.value)
+                }
             }
 
             // 4 - 결과 전송
@@ -157,12 +163,19 @@ interface CommonInterface : SubInterface {
         // 2 - 정상 파싱
         if (inParam?.keys != null) {
 
-            val data = HashMap<String,String>()
+            val data = HashMap<String,Any>()
             // 3 - 데이터 처리
             for(key in inParam.keys){
                 val value = PreferenceUtil.getValue(webViewActivity.applicationContext,key,"")
                 GLog.d("저장소 조회 키:$key , 값:$value")
-                data[key] = value
+
+                if(value.startsWith("[")){
+                    val listType: Type = object : TypeToken<List<Map<String, Any>>>(){}.type
+                    val parsedList: List<Map<String, Any>> = Gson().fromJson(value, listType)
+                    data[key] = parsedList
+                }else{
+                    data[key] = value
+                }
             }
 
             // 4 - 결과 전송
@@ -381,7 +394,7 @@ interface CommonInterface : SubInterface {
         }
     }
 
-    
+
     /**
      * 샘플
      */

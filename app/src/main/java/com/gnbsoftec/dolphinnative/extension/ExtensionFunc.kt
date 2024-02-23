@@ -14,6 +14,8 @@ fun String.toJsonString():String{
     return this.replace("\\\"", "\"") // 불필요한 역슬래시 제거
         .replace("\"{","{")
         .replace("}\"","}")
+        .replace("\"[","[")
+        .replace("]\"","]")
 }
 fun <T> Map<String, Any>.parseModel(clazz: Class<T>): T? {
     GLog.d("네이티브 통신 인입 파싱 ${clazz.name} , jsonString 데이터 : $this")

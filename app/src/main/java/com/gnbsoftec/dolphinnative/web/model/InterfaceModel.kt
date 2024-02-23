@@ -40,7 +40,7 @@ object InterfaceModel {
     data class InSetLocalStorage(
         override val cmd: String,
         override val callback: String,
-        val data: Map<String,String>
+        val data: Map<String,Any>
     ): BaseInput
     data class OutSetLocalStorage(
         override val resultCd: String,
@@ -58,7 +58,7 @@ object InterfaceModel {
     data class OutGetLocalStorage(
         override val resultCd: String,
         override val resultMsg: String,
-        val value: Map<String,String>
+        val value: Map<String,Any>
     ): BaseOutput
 
     /**
