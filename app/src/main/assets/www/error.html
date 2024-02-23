@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>에러 페이지</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .error-icon {
+            width: 100px; /* 이미지 크기 조정 */
+            margin-bottom: 20px;
+        }
+        .error-code {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .error-message {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        .close-app-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<img src="icon.png" alt="Error Icon" class="error-icon">
+<div class="error-code" id="errorCode">Loading...</div>
+<div class="error-message" id="errorMessage">Waiting for error message...</div>
+<button class="close-app-btn" onclick="closeApp()">앱 종료</button>
+<script>
+        function getQueryParams() {
+            var params = {};
+            location.search.slice(1).split("&").forEach(function (pair) {
+                var [key, value] = pair.split("=");
+                params[key] = decodeURIComponent(value);
+            });
+            return params;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var params = getQueryParams();
+            document.getElementById("errorCode").textContent = params.errorCode || "Unknown Error";
+            document.getElementById("errorMessage").textContent = params.errorMessage || "No error message provided.";
+        });
+
+        function closeApp() {
+            window.gnb.showToast(JSON.stringify({'callback':' ','cmd':'showToast','msg':'앱이 종료됩니다.'}));
+            window.gnb.appClose({});
+        }
+    </script>
+</body>
+</html>

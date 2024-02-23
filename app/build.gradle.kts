@@ -95,6 +95,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-messaging")
 
-    // Gif 이미지 로딩을 위한 라이브러리
-    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.17")
+    //APNG 이미지 로딩
+    implementation("com.github.penfeizhou.android.animation:apng:2.28.0")
 }

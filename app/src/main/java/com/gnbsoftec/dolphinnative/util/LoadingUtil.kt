@@ -9,6 +9,8 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import com.github.penfeizhou.animation.apng.APNGDrawable
+import com.github.penfeizhou.animation.loader.AssetStreamLoader
 import com.gnbsoftec.dolphinnative.databinding.DialogLoadingBinding
 
 object LoadingUtil {
@@ -29,15 +31,14 @@ object LoadingUtil {
                     .create()
                 dialog?.window?.apply {
                     // 배경색을 검정색으로 설정하고 투명도(알파)를 0.4로 설정
-//                    setBackgroundDrawable(ColorDrawable(Color.argb((0.4f * 255).toInt(), 0, 0, 0)))
                      setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 }
-
-                (binding.loadingAnim.drawable as? AnimationDrawable)?.start()
-
-                binding.loadingGif.drawable
+                val apngDrawable = APNGDrawable(AssetStreamLoader(activity.applicationContext, "apngs/dolphin_apng_loading.png")).apply {
+                    setLoopLimit(0)
+                    setAutoPlay(true)
+                }
+                binding.loadingAnim.setImageDrawable(apngDrawable)
             }
-
             dialog?.show()
         }
     }

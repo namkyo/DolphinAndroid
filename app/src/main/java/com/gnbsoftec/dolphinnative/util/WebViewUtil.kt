@@ -23,6 +23,7 @@ import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -33,6 +34,7 @@ import com.gnbsoftec.dolphinnative.common.Constants
 import com.gnbsoftec.dolphinnative.manager.InputFileManager
 import com.gnbsoftec.dolphinnative.view.WebViewActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.net.URLEncoder
 
 object WebViewUtil {
     var appOpen = false
@@ -138,14 +140,34 @@ object WebViewUtil {
                     ERROR_UNSUPPORTED_SCHEME -> "URL 스키마가 지원되지 않음"
                     else -> "알 수 없는 오류"
                 }
-                GLog.e("onReceivedError request:${request.url} errorCode : $errorCode , description : $description")
-
-                if(errorCode != ERROR_UNKNOWN){
-                    AlertUtil.showAlert(context,"안내","[$errorCode]$description url : ${request.url}","재접속"){
-                        view.reload()
+                GLog.e("onReceivedError errorCode : $errorCode , description : $description")
+//                if(errorCode != ERROR_UNKNOWN){
+//                    AlertUtil.showAlert(context,"안내","[$errorCode]$description url : ${request.url}","재접속"){
+//                        view.reload()
+//                    }
+//                }
+            }
+            override fun onReceivedHttpError(
+                view: WebView?,
+                request: WebResourceRequest?,
+                errorResponse: WebResourceResponse?
+            ) {
+                super.onReceivedHttpError(view, request, errorResponse)
+                // 상태 코드와 이유 구절을 로깅
+                GLog.e("onReceivedHttpError errorCode: ${errorResponse?.statusCode}, description: ${errorResponse?.reasonPhrase}")
+                if (request?.isForMainFrame == true) {
+                    when (errorResponse?.statusCode) {
+                        503, 404 -> {
+                            // 웹뷰에서 assets/www/error.html 페이지 로드
+                            val errorCode = errorResponse.statusCode
+                            val errorMessage = errorResponse.reasonPhrase ?: "No error message provided."
+                            val errorUrl = "file:///android_asset/www/데이터 처리ml?errorCode=$errorCode&errorMessage=${URLEncoder.encode(errorMessage, "UTF-8")}"
+                            view?.loadUrl(errorUrl)
+                        }
                     }
                 }
             }
+
             @SuppressLint("WebViewClientOnReceivedSslError")
             override fun onReceivedSslError(
                 view: WebView,
@@ -275,6 +297,31 @@ object WebViewUtil {
                     }
                     .show()
                 return true
+            }
+        }
+    }
+
+    //쿠키 초기화
+    fun cookieInit(url:String){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+            // 웹뷰 호스트의 쿠키를 가져옵니다.
+            val cookieManager = CookieManager.getInstance()
+            cookieManager.getCookie(url)?.let { cookies ->
+                // 쿠키 정보를 로그에 출력합니다.
+                GLog.d("Webview:cookies = $cookies")
+                // 쿠키 문자열을 ";"로 분리하여 배열로 만듭니다.
+                val arrCookie = cookies.split(";")
+                // 분리된 쿠키 각각에 대해 조건을 검사합니다.
+                arrCookie.forEach { cookie ->
+                    GLog.d("cookie = $cookie")
+                    val cookieData = cookie.split("=")
+                    val key = cookieData[0]
+                    //쿠키는 다시 설정합니다.
+                    if (key=="JSESSIONID") {
+                        GLog.d("쿠키 다시 설정: $key=")
+                        cookieManager.setCookie(Constants.getWebViewHost(), "$key=")
+                    }
+                }
             }
         }
     }

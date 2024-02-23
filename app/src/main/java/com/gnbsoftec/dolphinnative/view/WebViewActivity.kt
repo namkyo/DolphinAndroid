@@ -4,15 +4,11 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.drawable.AnimationDrawable
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.webkit.CookieManager
 import androidx.activity.result.ActivityResultLauncher
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.gnbsoftec.dolphinnative.BuildConfig
 import com.gnbsoftec.dolphinnative.R
@@ -26,13 +22,11 @@ import com.gnbsoftec.dolphinnative.util.BackPressUtil
 import com.gnbsoftec.dolphinnative.util.CoroutineUtil
 import com.gnbsoftec.dolphinnative.util.FileUtil
 import com.gnbsoftec.dolphinnative.util.GLog
-import com.gnbsoftec.dolphinnative.util.ImgUtil
 import com.gnbsoftec.dolphinnative.util.PermissionUtil
 import com.gnbsoftec.dolphinnative.util.PreferenceUtil
 import com.gnbsoftec.dolphinnative.util.ToastUtil
 import com.gnbsoftec.dolphinnative.util.WebViewUtil
 import com.gnbsoftec.dolphinnative.web.WebAppInterface
-import com.gnbsoftec.dolphinnative.web.model.InterfaceModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
@@ -45,10 +39,6 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>(R.layout.activity_w
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        onCreateImpl()
-    }
-
-    private fun onCreateImpl(){
         GLog.d("+++++++++++++++++++++++++++++++[ WebViewActivity : Android BuildConfig ]+++++++++++++++++++++++++++++++")
         GLog.d("BuildConfig.BUILD_TYPE                  : " + BuildConfig.BUILD_TYPE)
         GLog.d("Constants.IS_REAL                       : " + Constants.IS_REAL)
@@ -56,44 +46,19 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>(R.layout.activity_w
         GLog.d("Constants.launchUrl                     : " + Constants.getWebViewHost())
         GLog.d("PUSH_KEY                                : " + PreferenceUtil.getValue(context, PreferenceUtil.keys.PUSH_KEY , ""))
         GLog.d("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        val extras = intent.extras
-        GLog.d("data : Key: ${intent.data}")
-        extras?.let {
-            for (key in it.keySet()) {
-                val value = it.get(key)
-                GLog.d("extras : Key: $key, Value: $value")
-            }
-        }
+        onCreateImpl()
+    }
+
+    private fun onCreateImpl(){
+        //푸쉬 클릭하고 왔는지 체크 있으면 푸쉬 파라미터 적재
         intent?.getStringExtra(PreferenceUtil.keys.PUSH_URL)?.let {
             GLog.d("푸쉬 데이터 $it")
             PreferenceUtil.put(context,PreferenceUtil.keys.LINK_DATA,it)
         }
-
-        //JSESSIONID 만 지우고 나머지 쿠키 유지
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-            // 웹뷰 호스트의 쿠키를 가져옵니다.
-            val cookieManager = CookieManager.getInstance()
-            cookieManager.getCookie(Constants.getWebViewHost())?.let { cookies ->
-                // 쿠키 정보를 로그에 출력합니다.
-                GLog.d("Webview:cookies = $cookies")
-                // 쿠키 문자열을 ";"로 분리하여 배열로 만듭니다.
-                val arrCookie = cookies.split(";")
-                // 분리된 쿠키 각각에 대해 조건을 검사합니다.
-                arrCookie.forEach { cookie ->
-                    GLog.d("cookie = $cookie")
-                    val cookieData = cookie.split("=")
-                    val key = cookieData[0]
-                    //쿠키는 다시 설정합니다.
-                    if (key=="JSESSIONID") {
-                        GLog.d("쿠키 다시 설정: $key=")
-                        cookieManager.setCookie(Constants.getWebViewHost(), "$key=")
-                    }
-                }
-            }
-        }
-
+        //쿠키 초기화
+        WebViewUtil.cookieInit(Constants.getWebViewHost())
+        //url 이동
         binding.webView.loadUrl(Constants.getWebViewHost())
-
         //앱오픈 검사
         loadTimer()
     }
@@ -101,17 +66,8 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>(R.layout.activity_w
     //앱실행중
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-
         GLog.d("onNewIntent")
-        val extras = intent?.extras
-        GLog.d("data : Key: ${intent?.data}")
-        extras?.let {
-            for (key in it.keySet()) {
-                val value = it.get(key)
-                GLog.d("extras : Key: $key, Value: $value")
-            }
-        }
-
+        //앱이 열려있는중 푸쉬 알림 클릭시 바로 링크 이동
         intent?.getStringExtra(PreferenceUtil.keys.PUSH_URL)?.let {
             val callScript = "javascript:NativeUtil.fnPushLink(JSON.parse(JSON.stringify(${it.toJsonString()})));"
             GLog.d("푸쉬 링크 이동 $callScript")
@@ -228,28 +184,27 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>(R.layout.activity_w
      * 통신완료후 앱 오픈 처리
      */
     private fun appOpen(){
-        activity.runOnUiThread {
+        runOnUiThread {
+            //로딩제거
             binding.progressBar.visibility = View.GONE
 
             // 애니메이션이 끝나면 서서히 사라지게 처리
-            runOnUiThread {
-                binding.bgBack.animate()
-                    .alpha(0f)
-                    .setDuration(500) // 0.5초 동안 알파값을 0으로 변경
-                    .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            binding.bgBack.visibility = View.GONE
-                        }
-                    })
-                binding.splashAnim.animate()
-                    .alpha(0f)
-                    .setDuration(500) // 0.5초 동안 알파값을 0으로 변경
-                    .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            binding.splashAnim.visibility = View.GONE
-                        }
-                    })
-            }
+            binding.bgBack.animate()
+                .alpha(0f)
+                .setDuration(500) // 0.5초 동안 알파값을 0으로 변경
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        binding.bgBack.visibility = View.GONE
+                    }
+                })
+            binding.splashAnim.animate()
+                .alpha(0f)
+                .setDuration(500) // 0.5초 동안 알파값을 0으로 변경
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        binding.splashAnim.visibility = View.GONE
+                    }
+                })
 
         }
     }
